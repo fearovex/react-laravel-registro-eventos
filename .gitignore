@@ -9,5 +9,8 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/public/*
+/public/js/*
+/public/images/*
+/public/fonts/*
+/public/*.json
 package-lock.json
