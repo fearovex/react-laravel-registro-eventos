@@ -16,11 +16,9 @@ class userseedertable extends Seeder
         $user->name = 'Administrador';
         $user->email = 'admin@ipwork.com';
         $user->password = 'IPwork2020.';
-        $user->database = 'ipadmin';
+        $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
         $user->dashboard = "/app/locations";
-        $user->location = 0;
-        $user->campaing = 0;
         $user->id_rol = 1;
         $user->save();
     }
