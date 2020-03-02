@@ -102,15 +102,7 @@ function* signInUserWithEmailPassword({ payload }) {
             localStorage.setItem('user_dashboard', signInUser.dashboard);
             localStorage.setItem('user_location', signInUser.location);
             localStorage.setItem('user_campaing', signInUser.campaing);
-            if(signInUser.id_rol == 1){
-                localStorage.setItem('user_module', 'Locations');
-            }
-            if(signInUser.id_rol == 2){
-                localStorage.setItem('user_module', 'Location');
-            }
-            if(signInUser.id_rol == 3){
-                localStorage.setItem('user_module', 'Campaing');
-            }
+            localStorage.setItem('user_module', signInUser.id_rol);
             yield put(signinUserSuccess(signInUser));
             history.push('/');
         }
