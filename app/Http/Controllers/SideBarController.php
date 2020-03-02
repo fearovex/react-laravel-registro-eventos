@@ -53,10 +53,52 @@ class SideBarController extends Controller
             return response()->json($sidebarJSON, 200);
         }
         else if($rol == 2){
-            // session(['sideBar' => $sidebarJSON]);
+            $eventos=DB::connection($database)
+                ->select("select * from eventos");
+            $eventosArray = [];
+            
+            foreach ($eventos as $count => $evento){
+                $eventosArray[$count] = (object) array(
+                    'menu_title'=>$evento->nombre,
+                    'id_evento' => $evento->id,
+                    'menu_icon'=>'zmdi zmdi-pin',
+                    'type_multi'=>false,
+                    'child_routes'=>[
+                        (object) array(
+                            'menu_title'=>'Registro',
+                            'type_multi'=> false,
+                            'menu_icon'=>'ti-view-grid',
+                            'path'=>'/app/eventos/'.$evento->nombre.'/registro'
+                        )
+                    ]
+                );
+            }
+            $sidebarJSON = (object) array('category1' => $eventosArray);
+            return response()->json($sidebarJSON, 200);
         }
         else if($rol == 3){
-            // session(['sideBar' => $sidebarJSON]);
+            $eventos=DB::connection($database)
+                ->select("select * from eventos");
+            $eventosArray = [];
+            
+            foreach ($eventos as $count => $evento){
+                $eventosArray[$count] = (object) array(
+                    'menu_title'=>$evento->nombre,
+                    'id_evento' => $evento->id,
+                    'menu_icon'=>'zmdi zmdi-pin',
+                    'type_multi'=>false,
+                    'child_routes'=>[
+                        (object) array(
+                            'menu_title'=>'Validar',
+                            'type_multi'=> false,
+                            'menu_icon'=>'zmdi zmdi-view-carousel',
+                            'path'=>'/app/eventos/'.$evento->nombre.'/validacion'
+                        )
+                    ]
+                );
+            }
+            $sidebarJSON = (object) array('category1' => $eventosArray);
+            return response()->json($sidebarJSON, 200);
         }
         else if($rol == 4){
             // session(['sideBar' => $sidebarJSON]);

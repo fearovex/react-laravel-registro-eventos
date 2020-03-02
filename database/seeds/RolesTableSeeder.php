@@ -16,5 +16,15 @@ class RolesTableSeeder extends Seeder
         $rol->id = 1;
         $rol->rol = 'Administrador General';
         $rol->save();
+
+        $rol = new Role();
+        $rol->id = 2;
+        $rol->rol = 'Registrador';
+        $rol->save();
+
+        $rol = new Role();
+        $rol->id = 3;
+        $rol->rol = 'Validador';
+        $rol->save();
     }
 }
