@@ -38,8 +38,10 @@ export default class Eventos extends Component {
         this.state ={
 			dataEvents: [],
 			createEvent: false,
+			editEvent: false,
 			error:null,
 			form: {
+				id: 0,
 				nombre_evento: '',
 				fecha_inicio: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
 				fecha_fin: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos) + ":00",
@@ -48,7 +50,11 @@ export default class Eventos extends Component {
         }
         
         this.handleGetEvents = this.handleGetEvents.bind(this);
-        this.handleCreateEvent = this.handleCreateEvent.bind(this);
+		this.handleCreateEvent = this.handleCreateEvent.bind(this);
+		this.openModalEvent = this.openModalEvent.bind(this);
+		this.openModalEditEvent = this.openModalEditEvent.bind(this);
+		this.closeModalEvent = this.closeModalEvent.bind(this);
+		this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount(){
@@ -91,6 +97,41 @@ export default class Eventos extends Component {
 
 	}
 
+	async handleEditEvent(e){
+		try {
+			e.preventDefault();
+			let config = {
+				method: 'PUT',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state.form)
+			};
+			var id = this.state.form.id;
+			let res = await fetch(`${localStorage.urlDomain}api/events/${id}`, config);
+			let editResponse = await res.json();
+			if(editResponse.code == 200){
+				//mensaje de correcto
+				this.setState({
+					editEvent:false
+				})
+				this.handleGetEvents();
+				Sidebar.getSidebar();
+			}
+			if(editResponse.code == 500){
+				//mensaje de error
+				this.setState({
+					editEvent:true
+				})
+			}
+		} catch (error) {
+			this.setState({
+				error:error
+			})
+		}
+	}
+
     async handleGetEvents(){
         try {
             let res = await fetch(`${localStorage.urlDomain}api/events`);
@@ -98,9 +139,9 @@ export default class Eventos extends Component {
 
             for (let i = 0; i < dataEvents.length; i++) {
 				dataEvents[i]["Editar"] = 
-				<a /* onClick={() => this.openUrl('url',dataEvents[i].path_campania)} */>
+				<a onClick={() => this.openModalEditEvent(dataEvents[i].id)}>
 					<ListItemIcon className="menu-icon">
-						<i className='ti-world' style={{margin:"0 auto"}}></i>
+						<i className='ti-pencil-alt' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
 				</a>
 				dataEvents[i]["Registros"] = 
@@ -149,9 +190,32 @@ export default class Eventos extends Component {
 		});
 	}
 
-	closeModalEvent(){
+	async openModalEditEvent(id){
+		try {
+			let res = await fetch(`${localStorage.urlDomain}api/events/${id}/edit`);
+			console.log(res)
+			let editResponse = await res.json();
+			this.setState({
+				editEvent:true,
+				form: {
+					id: id,
+					nombre_evento: editResponse.nombre,
+					fecha_inicio: editResponse.fecha_inicial,
+					fecha_fin: editResponse.fecha_final,
+					descripcion: editResponse.descripcion,
+				},
+			})
+		} catch (error) {
+			console.log(error)
+			this.setState({
+				error:error
+			})
+		}
+	}
+
+	closeModalEvent(name){
 		this.setState({
-			createEvent: false,
+			[name]: false,
 		});
 	}
 
@@ -182,7 +246,7 @@ export default class Eventos extends Component {
     
     render() {
 		const columns = ['Nombre', 'Descripción', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Registros','Dashboard'];
-		const {createEvent, form} = this.state;
+		const {createEvent, editEvent, form} = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
@@ -214,9 +278,10 @@ export default class Eventos extends Component {
 							confirmBtnText="Crear"
 							confirmBtnBsStyle="primary"
 							cancelBtnText="Cerrar"
+							title=""
 							cancelBtnBsStyle="danger"
 							onConfirm={() => this.handleCreateEvent(event)}
-							onCancel={() => this.closeModalEvent()}
+							onCancel={() => this.closeModalEvent("createEvent")}
 						>
 							<div className="row">
 								<div className="col-lg-12">
@@ -266,7 +331,67 @@ export default class Eventos extends Component {
 								</div> 
 							</div>
         				</SweetAlert>
-
+						{/* Editar */}
+						<SweetAlert
+							btnSize="sm"
+							show={editEvent}
+							showCancel
+							confirmBtnText="Crear"
+							confirmBtnBsStyle="primary"
+							cancelBtnText="Cerrar"
+							title=""
+							cancelBtnBsStyle="danger"
+							onConfirm={() => this.handleEditEvent(event)}
+							onCancel={() => this.closeModalEvent("editEvent")}
+						>
+							<div className="row">
+								<div className="col-lg-12">
+									<FormGroup>
+										<Label for="nombre_evento">Nombre Evento</Label>
+										<Input type="text" autoComplete="off" name="nombre_evento" id="nombre_evento" value={form.nombre_evento} onChange={() => this.handleChange(event)} placeholder="Nombre del Evento" />
+									</FormGroup>
+									<div className="row">
+										<div className="col-lg-6 mb-4">
+											<DateTimePicker
+												className="has-input has-input-lg"
+												key="fecha_inicio"
+												label="Fecha Inicio"
+												required
+												value={form.fecha_inicio}
+												format="YYYY/MM/DD hh:mm a"
+												onChange={(event) => this.handleChange(event, 'fecha_inicio')}
+												animateYearScrolling={false}
+												leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+												rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+												showTodayButton={true}
+											/>
+										</div>
+										<div className="col-lg-6 mb-4">
+											<DateTimePicker
+												className="has-input has-input-lg"
+												key="fecha_fin"
+												label="Fecha Fin"
+												required
+												value={form.fecha_fin}
+												minDate={moment(form.fecha_inicio, 'YYYY/MM/DD hh:mm a')}
+												format="YYYY/MM/DD hh:mm a"
+												onChange={(event) => this.handleChange(event, 'fecha_fin')}
+												animateYearScrolling={false}
+												leftArrowIcon={<i className="zmdi zmdi-arrow-back" />}
+												rightArrowIcon={<i className="zmdi zmdi-arrow-forward" />}
+												showTodayButton={true}
+											/>
+										</div>
+									</div>
+								</div>								
+								<div className="col-lg-12">
+									<FormGroup>
+										<Label for="descripcion">Descripción</Label>
+										<Input type="textarea" autoComplete="off" className="textAreaResize" rows="4" name="descripcion" id="descripcion" value={form.descripcion} onChange={() => this.handleChange(event)} placeholder="Descripción"/>
+									</FormGroup>
+								</div> 
+							</div>
+        				</SweetAlert>
 					</div>
 				</div>
 

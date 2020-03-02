@@ -20,7 +20,7 @@ class EventsController extends Controller
         try {
             $eventos = DB::connection(session('database'))
                 ->table('eventos')
-                ->select('nombre as Nombre', 'descripcion as Descripción','fecha_inicial as Fecha Inicio','fecha_final as Fecha Fin','evento_tabla')
+                ->select('id','nombre as Nombre', 'descripcion as Descripción','fecha_inicial as Fecha Inicio','fecha_final as Fecha Fin','evento_tabla')
                 ->get();
     
             return response()->json($eventos, 200);
@@ -122,7 +122,16 @@ class EventsController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $evento = DB::connection(session('database'))
+                ->table('eventos')
+                ->where('id', $id)
+                ->first();
+    
+            return response()->json($evento, 200);
+        } catch (\Throwable $th) {
+            return response()->json($th, 500);
+        }
     }
 
     /**
@@ -134,7 +143,22 @@ class EventsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            DB::connection(session('database'))
+                ->table('eventos')
+                ->where('id', $id)
+                ->update([
+                    'nombre' => $request->nombre_evento,
+                    'descripcion' => $request->descripcion,
+                    'fecha_inicial' => $request->fecha_inicio,
+                    'fecha_final' => $request->fecha_fin,
+                ]);
+
+            return response()->json(['code'=>200]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['code'=>500]);
+        }
     }
 
     /**

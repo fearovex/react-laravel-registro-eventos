@@ -22,7 +22,7 @@ class SideBarController extends Controller
             );
             
             foreach ($eventos as $count => $evento){
-                $eventosArray[$count] = (object) array(
+                $eventosArray[($count+1)] = (object) array(
                     'menu_title'=>$evento->nombre,
                     'id_evento' => $evento->id,
                     'menu_icon'=>'zmdi zmdi-pin',
