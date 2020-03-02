@@ -18,4 +18,4 @@ CREATE TABLE diccionario (
 	alias_columna VARCHAR(100) NOT NULL
 );
 
-INSERT INTO diccionario VALUES ('nombre', 'Nombre'), ('descripcion', 'Descripcción'), ('fecha_inicial', 'Fecha Inicial'), ('fecha_final', 'Fecha Final'), ('evento_tabla', 'Tabla');
+INSERT INTO diccionario VALUES ('nombre', 'Nombre'), ('descripcion', 'Descripción'), ('fecha_inicial', 'Fecha Inicial'), ('fecha_final', 'Fecha Final'), ('evento_tabla', 'Tabla');

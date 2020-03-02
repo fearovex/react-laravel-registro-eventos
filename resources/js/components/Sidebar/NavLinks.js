@@ -1,29 +1,20 @@
 // // sidebar nav links
 
-export default {
-
-    
+export default {  
     
    category1: [
       {
-         "menu_title": "sidebar.dashboard",
-         "menu_icon": "zmdi zmdi-view-dashboard",
+         "menu_title": "",
+         "menu_icon": "",
          "type_multi": null,
-         "new_item": true,
          "child_routes": [
             {
-               "menu_title": "sidebar.ecommerce",
+               "menu_title": "",
                "new_item": false,
-               "path": "/app/dashboard/ecommerce"
+               "path": ""
             },
-            {
-               "path": "/dashboard/crm/dashboard",
-               "new_item": true,
-               "menu_title": "sidebar.crm"
-            },
-         ]
+         ],
       }
    ]
-
 
 }

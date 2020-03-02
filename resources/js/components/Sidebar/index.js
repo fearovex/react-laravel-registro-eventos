@@ -9,12 +9,11 @@ import { Link } from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import './styles.css';
 // redux actions
-import { collapsedSidebarAction } from 'Actions';
+import { collapsedSidebarAction, updateSidebar } from 'Actions';
 
 // components
 import UserBlock from './UserBlock';
 import SidebarContent from './SidebarContent';
-import AgencySidebar from '../AgencyMenu/AgencySidebar';
 
 class Sidebar extends Component {
 
@@ -33,7 +32,16 @@ class Sidebar extends Component {
 	}
 
 	componentDidMount() {
+		this.getSidebar();
 		window.addEventListener("resize", this.updateDimensions);
+	}
+
+	async getSidebar(){
+		let res = await fetch(`${localStorage.urlDomain}api/sidebar`)
+		let data = await res.json();
+		this.props.updateSidebar(
+			data
+		);
 	}
 
 	componentWillUnmount() {
@@ -76,11 +84,7 @@ class Sidebar extends Component {
 								style={{ height: 'calc(100vh - 60px)' }}
 							>
 								<UserBlock />
-								{!agencySidebar ?
-									<SidebarContent />
-									:
-									<AgencySidebar />
-								}
+								<SidebarContent />
 							</Scrollbars>
 						</div>
 					</div>
@@ -97,5 +101,5 @@ const mapStateToProps = ({ settings }) => {
 };
 
 export default withRouter(connect(mapStateToProps, {
-	collapsedSidebarAction,
+	collapsedSidebarAction, updateSidebar
 })(Sidebar));

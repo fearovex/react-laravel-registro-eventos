@@ -26,6 +26,10 @@ Route::group(['middleware' => 'cors'], function() {
     Route::get('/hidden','Api\GeneralController@index');
 
     Route::group(['middleware' => 'connection'], function() {
-        
+
+        Route::get('/sidebar','SideBarController@getSideBarRol');
+
+        Route::resource('/events','EventsController');
+
     });
  });

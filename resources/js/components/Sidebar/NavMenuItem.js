@@ -79,7 +79,7 @@ class NavMenuItem extends Component {
                                  <ListItem button component="li" key={index}>
                                     <NavLink 
                                        to={subMenu.path}
-                                       onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
+                                       // onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
                                        activeClassName="item-active"
                                     >
                                        <ListItemIcon className="menu-icon">
@@ -122,7 +122,7 @@ class NavMenuItem extends Component {
                                                    <NavLink 
                                                       activeClassName="item-active" 
                                                       to={nestedMenu.path}
-                                                      onClick = {() => this.ClickNavLink(nestedMenu.id_location, nestedMenu.id_campain)}
+                                                      // onClick = {() => this.ClickNavLink(nestedMenu.id_location, nestedMenu.id_campain)}
                                                    >
                                                       
                                                       <span className="menu pl-10 d-inline-block">
@@ -142,7 +142,7 @@ class NavMenuItem extends Component {
                                        <ListItem button component="li" >
                                           <NavLink 
                                              to={subMenu.path}
-                                             onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
+                                             // onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
                                              activeClassName="item-active"
                                           >
                                              <ListItemIcon className="menu-icon">

@@ -2,21 +2,27 @@
  * Sidebar Reducers
  */
 import update from 'react-addons-update';
-import { TOGGLE_MENU, AGENCY_TOGGLE_MENU } from 'Actions/types';
+import { TOGGLE_MENU, AGENCY_TOGGLE_MENU, UPDATE_SIDEBAR } from 'Actions/types';
 
 // nav links
-// import navLinks from 'Components/Sidebar/NavLinks';
-import agencyNavLinks from 'Components/AgencyMenu/NavLinks';
+import navLinks from 'Components/Sidebar/NavLinks';
 
 
 const INIT_STATE = {
-	sidebarMenus: JSON.parse(localStorage.navLinks),
-	agencySidebarMenu: agencyNavLinks,
+	sidebarMenus: navLinks,
 }
+const updateSideBar = (state = INIT_STATE, action) => {
+	return {
+		...state,
+		sidebarMenus: { ...state.sidebarMenus, ...action.payload }
+	};
+};
 
 export default (state = INIT_STATE, action) => {
-	
+
 		switch (action.type) {
+			case UPDATE_SIDEBAR:
+				return updateSideBar(state, action);
 			case TOGGLE_MENU:
 				let index = state.sidebarMenus[action.payload.stateCategory].indexOf(action.payload.menu);
 				for (var key in state.sidebarMenus) {

@@ -17,7 +17,8 @@ import {
     STOP_USER_TOUR,
     TOGGLE_DARK_SIDENAV,
     AGENCY_TOGGLE_MENU,
-    CHANGE_AGENCY_LAYOUT_BG
+    CHANGE_AGENCY_LAYOUT_BG,
+    UPDATE_SIDEBAR
 } from './types';
 
 /**
@@ -146,3 +147,11 @@ export const agencyLayoutBgHandler = (color) => ({
     type: CHANGE_AGENCY_LAYOUT_BG,
     payload: color
 })
+
+/**
+* Redux Action For Update Side Bar
+*/
+export const updateSidebar = (updateMenu) => ({
+    type: UPDATE_SIDEBAR,
+    payload: updateMenu
+});
