@@ -45,7 +45,7 @@ class App extends Component {
          if (user === null) {
             return (<Redirect to={'/signin'} />);
          } else {
-            return (<Redirect to={/* localStorage.user_dashboard */ "/app/blank"} />);
+            return (<Redirect to={localStorage.user_dashboard} />);
          }
       }
       return (
