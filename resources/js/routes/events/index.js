@@ -145,13 +145,13 @@ export default class Eventos extends Component {
 					</ListItemIcon>
 				</a>
 				dataEvents[i]["Registros"] = 
-				<Link to={location.pathname + '/' + dataEvents[i].Nombre} /* onClick={() => this.DataEvents(dataEvents[i].id, dataEvents[i].Nombre)} */>
+				<Link to={location.pathname + '/' + dataEvents[i].Nombre + '/registro'} /* onClick={() => this.DataEvents(dataEvents[i].id, dataEvents[i].Nombre)} */>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-eye' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
 				</Link>
 				dataEvents[i]["Dashboard"] = 
-				<Link to={location.pathname + '/' + dataEvents[i].Nombre+'/dashboard'} /* onClick={() => this.DashboardCampania(dataEvents[i].id, dataEvents[i].campania, dataEvents[i].Vertical)} */>
+				<Link to={location.pathname + '/' + dataEvents[i].Nombre+'/'} /* onClick={() => this.DashboardCampania(dataEvents[i].id, dataEvents[i].campania, dataEvents[i].Vertical)} */>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-pie-chart' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -271,6 +271,7 @@ export default class Eventos extends Component {
 							onClick={() => this.openModalEvent()}
 						>Crear Evento
 						</Button>
+						{/* Crear */}
 						<SweetAlert
 							btnSize="sm"
 							show={createEvent}

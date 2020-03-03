@@ -79,22 +79,22 @@ class EventsController extends Controller
                 $table->bigInteger('id_evento');
                 $table->dateTime('fecha_creacion');
     
+                $table->string('nombre')->nullable();
                 // if($request->nombre){
                     $table->string('estado_nombre')->nullable();
                 // }            
+                $table->string('apellidos')->nullable();
                 // if($request->apellidos){
                     $table->string('estado_apellidos')->nullable();
                 // }
-                // if($request->email){
-                    $table->string('estado_email')->nullable();
+                $table->string('categoria')->nullable();
+                // if($request->categoria){
+                    $table->string('estado_categoria')->nullable();
                 // }              
+                $table->string('numero_documento')->nullable();
                 // if($request->numero_documento){
                     $table->string('estado_numero_documento')->nullable();
                 // } 
-                $table->string('email')->nullable();
-                $table->string('nombre')->nullable();
-                $table->string('apellidos')->nullable();
-                $table->string('numero_documento')->nullable();
             });
             return 200;
         } catch (\Throwable $th) {
