@@ -87,14 +87,18 @@ class EventsController extends Controller
                 // if($request->apellidos){
                     $table->string('estado_apellidos')->nullable();
                 // }
-                $table->string('categoria')->nullable();
-                // if($request->categoria){
-                    $table->string('estado_categoria')->nullable();
-                // }              
                 $table->string('numero_documento')->nullable();
                 // if($request->numero_documento){
                     $table->string('estado_numero_documento')->nullable();
                 // } 
+                $table->string('escarapela')->nullable();
+                // if($request->escarapela){
+                    $table->string('estado_escarapela')->nullable();
+                // } 
+                $table->string('categoria')->nullable();
+                // if($request->categoria){
+                    $table->string('estado_categoria')->nullable();
+                // }              
             });
             return 200;
         } catch (\Throwable $th) {
