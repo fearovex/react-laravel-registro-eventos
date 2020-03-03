@@ -31,5 +31,10 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::resource('/events','EventsController');
 
+        Route::resource('/register', 'RegisterController');
+        
+        Route::get('/register/columns/{id}', 'RegisterController@GetColumns');
+
+        Route::post('/register/data', 'RegisterController@DataTable');
     });
  });

@@ -55,6 +55,7 @@ export default class Eventos extends Component {
 		this.openModalEditEvent = this.openModalEditEvent.bind(this);
 		this.closeModalEvent = this.closeModalEvent.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.ClickLink = this.ClickLink.bind(this);
     }
 
     componentDidMount(){
@@ -145,7 +146,7 @@ export default class Eventos extends Component {
 					</ListItemIcon>
 				</a>
 				dataEvents[i]["Registros"] = 
-				<Link to={location.pathname + '/' + dataEvents[i].Nombre + '/registro'} /* onClick={() => this.DataEvents(dataEvents[i].id, dataEvents[i].Nombre)} */>
+				<Link to={location.pathname + '/' + dataEvents[i].Nombre + '/registro'} onClick={() => this.ClickLink(dataEvents[i].id)}>
 					<ListItemIcon className="menu-icon">
 						<i className='ti-eye' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -193,7 +194,6 @@ export default class Eventos extends Component {
 	async openModalEditEvent(id){
 		try {
 			let res = await fetch(`${localStorage.urlDomain}api/events/${id}/edit`);
-			console.log(res)
 			let editResponse = await res.json();
 			this.setState({
 				editEvent:true,
@@ -243,7 +243,11 @@ export default class Eventos extends Component {
 			})
 		 }
 	}
-    
+	
+	ClickLink(id_register) {
+		localStorage.setItem('user_register', id_register);
+	}
+
     render() {
 		const columns = ['Nombre', 'Descripción', 'Fecha Inicio', 'Fecha Fin', 'Editar', 'Registros','Dashboard'];
 		const {createEvent, editEvent, form} = this.state;

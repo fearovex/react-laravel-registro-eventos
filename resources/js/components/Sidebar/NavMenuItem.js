@@ -23,7 +23,7 @@ class NavMenuItem extends Component {
          subMenuOpen: '',
       }
 
-      this.ClickNavLink = this.ClickNavLink.bind(this)
+      this.ClickNavLink = this.ClickNavLink.bind(this);
    }
 
 
@@ -46,10 +46,9 @@ class NavMenuItem extends Component {
       }
    }
 
-   ClickNavLink(id_location, id_campain){
-      localStorage.setItem('user_location', id_location);
-      localStorage.setItem('user_campaing', id_campain);
-   }
+   ClickNavLink(id_register) {
+		localStorage.setItem('user_register', id_register);
+	}
 
    render() {
       const { menu, onToggleMenu } = this.props;
@@ -79,7 +78,7 @@ class NavMenuItem extends Component {
                                  <ListItem button component="li" key={index}>
                                     <NavLink 
                                        to={subMenu.path}
-                                       // onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
+                                       onClick = {() => this.ClickNavLink(subMenu.id_evento)}
                                        activeClassName="item-active"
                                     >
                                        <ListItemIcon className="menu-icon">
@@ -122,7 +121,7 @@ class NavMenuItem extends Component {
                                                    <NavLink 
                                                       activeClassName="item-active" 
                                                       to={nestedMenu.path}
-                                                      // onClick = {() => this.ClickNavLink(nestedMenu.id_location, nestedMenu.id_campain)}
+                                                      onClick = {() => this.ClickNavLink(nestedMenu.id_evento)}
                                                    >
                                                       
                                                       <span className="menu pl-10 d-inline-block">
@@ -142,7 +141,7 @@ class NavMenuItem extends Component {
                                        <ListItem button component="li" >
                                           <NavLink 
                                              to={subMenu.path}
-                                             // onClick = {() => this.ClickNavLink(subMenu.id_location, subMenu.id_campain)}
+                                             onClick = {() => this.ClickNavLink(subMenu.id_evento)}
                                              activeClassName="item-active"
                                           >
                                              <ListItemIcon className="menu-icon">

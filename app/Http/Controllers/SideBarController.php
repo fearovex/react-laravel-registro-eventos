@@ -31,18 +31,21 @@ class SideBarController extends Controller
                         (object) array(
                             'menu_title'=>'Dashboard',
                             'type_multi'=> false,
+                            'id_evento' => $evento->id,
                             'menu_icon'=>'ti-pie-chart',
                             'path'=>'/app/eventos/'.$evento->nombre
                         ),
                         (object) array(
                             'menu_title'=>'Registro',
                             'type_multi'=> false,
+                            'id_evento' => $evento->id,
                             'menu_icon'=>'ti-view-grid',
                             'path'=>'/app/eventos/'.$evento->nombre.'/registro'
                         ),
                         (object) array(
                             'menu_title'=>'Validar',
                             'type_multi'=> false,
+                            'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-view-carousel',
                             'path'=>'/app/eventos/'.$evento->nombre.'/validacion'
                         )
@@ -67,6 +70,7 @@ class SideBarController extends Controller
                         (object) array(
                             'menu_title'=>'Registro',
                             'type_multi'=> false,
+                            'id_evento' => $evento->id,
                             'menu_icon'=>'ti-view-grid',
                             'path'=>'/app/eventos/'.$evento->nombre.'/registro'
                         )
@@ -91,6 +95,7 @@ class SideBarController extends Controller
                         (object) array(
                             'menu_title'=>'Validar',
                             'type_multi'=> false,
+                            'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-view-carousel',
                             'path'=>'/app/eventos/'.$evento->nombre.'/validacion'
                         )
