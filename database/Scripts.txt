@@ -1,0 +1,6 @@
+use registros;
+create table categorias(
+    id int AUTO_INCREMENT,
+    nombre_categoria varchar(100),
+    PRIMARY KEY(id)
+);
