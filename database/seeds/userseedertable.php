@@ -18,7 +18,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/locations";
+        $user->dashboard = "/app/eventos";
         $user->id_rol = 1;
         $user->save();
 
@@ -28,7 +28,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/locations";
+        $user->dashboard = "/app/blank";
         $user->id_rol = 2;
         $user->save();
 
@@ -38,7 +38,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/locations";
+        $user->dashboard = "/app/blank";
         $user->id_rol = 3;
         $user->save();
     }

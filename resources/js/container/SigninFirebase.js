@@ -100,8 +100,7 @@ class Signin extends Component {
       //     NotificationManager.error("Por favor verifique el captcha.",'',4000);
       //  }
    }
-   async componentWillUnmount(){
-      window.location.reload();
+   componentWillUnmount(){
    }
    forgotPassword(){
       this.props.history.push('/password/email')
