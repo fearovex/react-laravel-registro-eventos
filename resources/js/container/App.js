@@ -52,7 +52,7 @@ class App extends Component {
         
          <RctThemeProvider>
             <NotificationContainer />
-            {console.log(user)}
+            {/* {console.log(user)} */}
             <InitialPath
                path={`${match.url}app`}
                authUser={user}

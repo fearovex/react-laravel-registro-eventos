@@ -4,9 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 class RegisterController extends Controller
 {
+    public function GetColumns($id){
+        $db = session('database');
+        $table_name= DB::connection($db)->table('eventos')->select('evento_tabla')->where('id',$id)->first();
+        
+        $columns = DB::connection($db)
+            ->select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".$db."' AND TABLE_NAME = '".$table_name->evento_tabla."';");
+
+        $columnsEnable = [];
+
+        foreach ($columns as $key => $column){
+            $diccionario = DB::connection($db)->table('diccionario')->select('alias_columna')->where('nombre_columna',$column->COLUMN_NAME)->first();
+            if($diccionario){
+                $columnsEnable[count($columnsEnable)]['COLUMN_NAME'] = $diccionario->alias_columna;
+            }
+        }
+
+        return response()->json(($columnsEnable), 200);
+    }
+
+    public function DataTable(Request $request){
+        $db = session('database');
+        $table_name= DB::connection($db)->table('eventos')->select('evento_tabla')->where('id',$request->id_register)->first();
+
+        $select = "";
+        for ($i=0; $i < count($request->columns); $i++){
+            $diccionario = DB::connection(session('database'))->table('diccionario')->select('nombre_columna')->where('alias_columna',$request->columns[$i])->first();
+            if($diccionario){
+                $select .= $diccionario->nombre_columna." '".$request->columns[$i]."',";
+            }
+        }        
+        $select = substr($select, 0, -1);
+        $selectCompleto = "select ".$select." from ".$table_name->evento_tabla." order by fecha_creacion desc";
+        $detailEvents = DB::connection($db)->select($selectCompleto);
+        
+        return response()->json($detailEvents, 200);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,10 +80,25 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
+        $date = Carbon::now();
         $database = session('database');
-        $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_event)->first();
-        dd($tabla);
-
+            $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
+            $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
+            DB::connection(session('database'))->table($tabla->evento_tabla)->insert([
+                'id_evento'=> $request->id_register,
+                'fecha_creacion' => $date,
+                'nombre' => $request->form['nombre'],
+                'apellidos' => $request->form['apellidos'],
+                'numero_documento' => $request->form['numero_documento'],
+                'escarapela' => 'No',
+                'categoria' => $categoria->nombre_categoria,
+            ]);
+            return response()->json(200);
+        try {
+            
+        } catch (\Throwable $th) {
+            return response()->json(500);
+        }
     }
 
     /**
