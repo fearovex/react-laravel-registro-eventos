@@ -129,7 +129,7 @@ class Eventos extends Component {
 					editEvent:false
 				})
 				this.handleGetEvents();
-				Sidebar.getSidebar();
+				this.getSidebar();
 			}
 			if(editResponse.code == 500){
 				//mensaje de error
@@ -352,7 +352,7 @@ class Eventos extends Component {
 							btnSize="sm"
 							show={editEvent}
 							showCancel
-							confirmBtnText="Crear"
+							confirmBtnText="Editar"
 							confirmBtnBsStyle="primary"
 							cancelBtnText="Cerrar"
 							title=""
