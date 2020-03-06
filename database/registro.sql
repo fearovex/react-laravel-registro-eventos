@@ -19,3 +19,9 @@ CREATE TABLE diccionario (
 );
 
 INSERT INTO diccionario (nombre_columna,alias_columna) VALUES ('nombre', 'Nombre'), ('descripcion', 'Descripción'), ('fecha_inicial', 'Fecha Inicial'), ('fecha_final', 'Fecha Final'), ('evento_tabla', 'Tabla'), ('fecha_creacion', 'Fecha Registro'),('nombre', 'Nombre'), ('apellidos', 'Apellido'), ('numero_documento', 'Numero Documento'), ('escarapela', '¿Tiene Escarapela?'), ('categoria', 'Categoria');
+create table categorias(
+    id int AUTO_INCREMENT,
+    nombre_categoria varchar(100),
+    PRIMARY KEY(id)
+);
+insert into categorias (nombre_categoria) VALUES('Expositor'),('Visitante'),('Estudiante'),('Staff');

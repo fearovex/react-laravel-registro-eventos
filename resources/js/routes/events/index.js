@@ -10,7 +10,6 @@ import { Route, Link } from 'react-router-dom'
 import SweetAlert from 'react-bootstrap-sweetalert'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import FormGroupUI from '@material-ui/core/FormGroup';
-import Sidebar from 'Components/Sidebar';
 import {
 	Button,
 	Form,
@@ -20,14 +19,16 @@ import {
 	FormText
 } from 'reactstrap';
 import moment from "moment"
-import { DateTimePicker } from '@material-ui/pickers'
+import { DateTimePicker } from '@material-ui/pickers';
+import { updateSidebar } from 'Actions';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 // async components
 
-export default class Eventos extends Component {
+class Eventos extends Component {
     constructor(props){
-        super(props);
-
+		super(props);
 		let date = moment(new Date, 'YYYY/MM/DD hh:mm a');
 		let año = date.year();
 		let mes = date.month() + 1;
@@ -56,10 +57,12 @@ export default class Eventos extends Component {
 		this.closeModalEvent = this.closeModalEvent.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.ClickLink = this.ClickLink.bind(this);
+		this.getSidebar = this.getSidebar.bind(this);
     }
 
     componentDidMount(){
-        this.handleGetEvents();
+		this.handleGetEvents();
+		
 	}
 	
 	async handleCreateEvent(e){
@@ -81,8 +84,8 @@ export default class Eventos extends Component {
 				this.setState({
 					createEvent:false
 				})
+				this.getSidebar();
 				this.handleGetEvents();
-				Sidebar.getSidebar();
 			}
 			if(createResponse.code == 500){
 				//mensaje de error
@@ -96,6 +99,14 @@ export default class Eventos extends Component {
 			})
 		}
 
+	}
+
+	async getSidebar(){
+		let res = await fetch(`${localStorage.urlDomain}api/sidebar`)
+		let data = await res.json();
+		this.props.updateSidebar(
+			data
+		);
 	}
 
 	async handleEditEvent(e){
@@ -118,7 +129,7 @@ export default class Eventos extends Component {
 					editEvent:false
 				})
 				this.handleGetEvents();
-				Sidebar.getSidebar();
+				this.getSidebar();
 			}
 			if(editResponse.code == 500){
 				//mensaje de error
@@ -341,7 +352,7 @@ export default class Eventos extends Component {
 							btnSize="sm"
 							show={editEvent}
 							showCancel
-							confirmBtnText="Crear"
+							confirmBtnText="Editar"
 							confirmBtnBsStyle="primary"
 							cancelBtnText="Cerrar"
 							title=""
@@ -412,3 +423,11 @@ export default class Eventos extends Component {
         )
     }
 }
+
+const mapStateToProps = () => {
+	return {};
+};
+
+export default withRouter(connect(mapStateToProps, {
+	updateSidebar
+})(Eventos));

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 class RegisterController extends Controller
 {
     public function GetColumns($id){
@@ -51,6 +51,7 @@ class RegisterController extends Controller
      */
     public function index()
     {
+        
     }
 
     /**
@@ -60,7 +61,15 @@ class RegisterController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            $categorias = DB::connection(session('database'))
+                ->table('categorias')
+                ->select('id','nombre_categoria')
+                ->get();
+            return response()->json($categorias, 200);
+        } catch (\Throwable $th) {
+            return response()->json($th, 500);
+        }
     }
 
     /**
@@ -71,7 +80,25 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $date = Carbon::now();
+        $database = session('database');
+            $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
+            $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
+            DB::connection(session('database'))->table($tabla->evento_tabla)->insert([
+                'id_evento'=> $request->id_register,
+                'fecha_creacion' => $date,
+                'nombre' => $request->form['nombre'],
+                'apellidos' => $request->form['apellidos'],
+                'numero_documento' => $request->form['numero_documento'],
+                'escarapela' => 'No',
+                'categoria' => $categoria->nombre_categoria,
+            ]);
+            return response()->json(200);
+        try {
+            
+        } catch (\Throwable $th) {
+            return response()->json(500);
+        }
     }
 
     /**

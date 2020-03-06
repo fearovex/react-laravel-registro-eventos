@@ -1,0 +1,36 @@
+.selectStyle{
+    background: white;
+    font-size: 14px;
+}
+.sweetAlertCenter{
+    left: 53%!important;
+}
+.fontSizeLabel{
+    font-size: 15px;
+}
+.floatButton{
+    float: right;
+}
+#ifmcontentstoprint{
+    width:100%;
+    border: 1px solid;
+    border-radius: 12px;
+    padding: 20px;
+}
+.positionLeft{
+    float:left;
+}
+.positionRight{
+    float: right;
+}
+canvas{
+    height: 100px !important;
+    width: 100px !important;
+    margin-bottom: 10px;
+}
+.vCard{
+    /* float: right;
+    margin-right: 56px;
+    text-align: 'center';
+    font-family: 'fantasy'; */
+}
