@@ -3,6 +3,12 @@ import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
 import SweetAlert from 'react-bootstrap-sweetalert'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Select from '@material-ui/core/Select';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import { Scrollbars } from 'react-custom-scrollbars';
 import {
 	Button,
 	Form,
@@ -35,6 +41,7 @@ export default class Registro extends Component {
             modalVCardQR: false,
             dataCategories:[],
             columns: [],
+            columnsDB: [],
             codeBar: false,
             id_register: localStorage.user_register,
             dataRegisters: [],
@@ -45,7 +52,10 @@ export default class Registro extends Component {
                 apellidos: "",
                 numero_documento: "",
                 categorias:""
-            }
+            },
+            register: [],
+            userNotFound: false,
+            userRegister: false,
         }
         this.handleGetColumn = this.handleGetColumn.bind(this);
         this.handleGetDataRegisters = this.handleGetDataRegisters.bind(this);
@@ -63,12 +73,15 @@ export default class Registro extends Component {
             let columnsResponse = await res.json();
 
             let arrayNames=[]
+            let arrayNameDb=[]
 			for (let i = 0; i < columnsResponse.length; i++) {
-				arrayNames.push.apply(arrayNames, Object.values(columnsResponse[i]))
+                arrayNames.push.apply(arrayNames, Object.values(columnsResponse[i]))
+                arrayNameDb.push.apply(arrayNameDb, Object.values(columnsResponse[i]))
             }
             arrayNames.push.apply(arrayNames, Object.values({"COLUMN_NAME":"Imprimir"}));
             this.setState({
                 columns: arrayNames,
+                columnsDB: arrayNameDb,
             })
             this.handleGetDataRegisters();
         } catch (error) {
@@ -125,9 +138,9 @@ export default class Registro extends Component {
         }
     }
 
-    closeModalEvent(){
+    closeModalEvent(modal){
         this.setState({
-            registerModal:false
+            [modal]:false
         })
     }
 
@@ -203,7 +216,8 @@ export default class Registro extends Component {
 
     openModalVCardQR(){
          this.setState({ 
-			modalVCardQR: true 
+            modalVCardQR: true,
+            userRegister: false,
         })
     }
     closeModalvCardQR(){
@@ -222,18 +236,36 @@ export default class Registro extends Component {
         this.setState({
             codeBar: true,
             form: {
-                LecturaCode: "",
+                ...this.state.form,
+                numero_documento: "",
             },
         });
     }
 
     async searchRegister(e){
         try {
-			let res = await fetch(`${localStorage.urlDomain}api/register/${this.state.form.LecturaCode}`);
-			let searchResponse = await res.json();
-            this.setState({
-                codeBar: false
-            });
+            let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state)
+			};
+			let res = await fetch(`${localStorage.urlDomain}api/register/search`, config);
+            let searchResponse = await res.json();
+            if(searchResponse == 500){
+                this.setState({
+                    codeBar: false,
+                    userNotFound: true,
+                });
+            }else{
+                this.setState({
+                    codeBar: false,
+                    userRegister: true,
+                    register: searchResponse[0],
+                });
+            }
         } catch (error) {
             console.log(error)
         }
@@ -266,7 +298,7 @@ export default class Registro extends Component {
     }
     
     render() {
-		const {columns, dataRegisters, registerModal, codeBar, dataCategories, form, modalVCardQR, rowData, objectDataUser} = this.state;
+		const {columns, columnsDB, dataRegisters, registerModal, codeBar, dataCategories, form, modalVCardQR, rowData, objectDataUser, userNotFound, userRegister, register} = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
@@ -306,7 +338,7 @@ export default class Registro extends Component {
                         title="Registro Manual"
                         cancelBtnBsStyle="danger"
                         onConfirm={() => this.handleSubmit(event)}
-                        onCancel={() => this.closeModalEvent()}
+                        onCancel={() => this.closeModalEvent("registerModal")}
                     >  
                     <div className="row">
                         <div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
@@ -396,8 +428,51 @@ export default class Registro extends Component {
                 >
                     <div className="row">
                         <div className="col-lg-12 text-center">
-                            <label htmlFor="LecturaCode" className="">Numero de documento</label>
-                            <Input name="LecturaCode" id="LecturaCode" value={form.LecturaCode} onChange={() => this.handleChange(event)} />
+                            <label htmlFor="numero_documento" className="">Numero de documento</label>
+                            <Input name="numero_documento" id="numero_documento" value={form.numero_documento} onChange={() => this.handleChange(event)} />
+                        </div>
+                    </div>
+                </SweetAlert>
+                <SweetAlert
+                    danger
+                    btnSize="sm"
+                    show={userNotFound}
+                    confirmBtnText="Cerrar"
+                    confirmBtnBsStyle="danger"
+                    title="Usuario No Registrado"
+                    onConfirm={() => this.closeModalEvent("userNotFound")}
+                >
+                </SweetAlert>
+
+                <SweetAlert
+                    btnSize="sm"
+                    show={userRegister}
+                    showCancel
+                    confirmBtnText="Imprimir"
+                    cancelBtnText="Cerrar"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="primary"
+                    title="Datos de registro"
+                    onConfirm={() => this.openModalVCardQR()}
+                    onCancel={() => this.closeModalEvent("userRegister")}
+                >
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <Scrollbars className="rct-scroll" autoHeight autoHeightMin={100} autoHeightMax={320} autoHide>
+                                <div className="card mb-0 transaction-box">
+                                        <Table className="table-wrap" >
+                                        <TableBody >
+                                            {columnsDB.map((list, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell className="columnsStyles">{list}</TableCell>
+                                                    <TableCell>{register[list]}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                        </Table>
+                                    
+                                </div>
+                            </Scrollbars>
                         </div>
                     </div>
                 </SweetAlert>

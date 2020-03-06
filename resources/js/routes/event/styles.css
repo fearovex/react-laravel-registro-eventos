@@ -34,3 +34,7 @@ canvas{
     text-align: 'center';
     font-family: 'fantasy'; */
 }
+.table-wrap td:first-child{
+    text-transform: capitalize !important;
+    font-weight: bold;
+}
