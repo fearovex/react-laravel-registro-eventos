@@ -38,7 +38,7 @@ class RegisterController extends Controller
             }
         }        
         $select = substr($select, 0, -1);
-        $selectCompleto = "select ".$select." from ".$table_name->evento_tabla." order by fecha_creacion desc";
+        $selectCompleto = "select id,".$select." from ".$table_name->evento_tabla." order by fecha_creacion desc";
         $detailEvents = DB::connection($db)->select($selectCompleto);
         
         return response()->json($detailEvents, 200);
@@ -80,25 +80,43 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
-        $date = Carbon::now();
-        $database = session('database');
-            $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
-            $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
-            DB::connection(session('database'))->table($tabla->evento_tabla)->insert([
-                'id_evento'=> $request->id_register,
-                'fecha_creacion' => $date,
-                'nombre' => $request->form['nombre'],
-                'apellidos' => $request->form['apellidos'],
-                'numero_documento' => $request->form['numero_documento'],
-                'escarapela' => 'No',
-                'categoria' => $categoria->nombre_categoria,
-            ]);
-            return response()->json(200);
         try {
-            
+            $date = Carbon::now();
+            $database = session('database');
+                $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
+                $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
+                DB::connection(session('database'))->table($tabla->evento_tabla)->insert([
+                    'id_evento'=> $request->id_register,
+                    'fecha_creacion' => $date,
+                    'nombre' => $request->form['nombre'],
+                    'apellidos' => $request->form['apellidos'],
+                    'numero_documento' => $request->form['numero_documento'],
+                    'cantidad_impresos'=>0,
+                    'escarapela' => 'No',
+                    'categoria' => $categoria->nombre_categoria,
+                ]);
+                return response()->json(200);
         } catch (\Throwable $th) {
             return response()->json(500);
         }
+    }
+
+    public function logPrints(Request $request){
+        try {
+            $database = session('database');
+            $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
+            DB::connection(session('database'))->table($tabla->evento_tabla)->where('id',$request->form['id_usuario'])->update([
+                'cantidad_impresos'=> $request->form['cantidad_impresos']+1,
+            ]);
+    
+            DB::connection(session('database'))->table('log_impresiones')->insert([
+                'id_usuario' => $request->form['id_usuario'],
+            ]);
+            return response()->json(200);
+        } catch (\Throwable $th) {
+            return response()->json(500);
+        }
+        
     }
 
     /**

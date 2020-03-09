@@ -26,6 +26,7 @@ import Error from "@material-ui/icons/Error";
 export default class Registro extends Component {
     constructor(props){
         super(props);
+        
         if(localStorage.user_module != 1 && localStorage.user_module != 2){
             this.props.history.goBack();
         }
@@ -43,13 +44,16 @@ export default class Registro extends Component {
                 nombre:"",
                 apellidos: "",
                 numero_documento: "",
-                categorias:""
+                categorias:"",
+                id_usuario:"",
+                cantidad_impresos:""
             }
         }
         this.handleGetColumn = this.handleGetColumn.bind(this);
         this.handleGetDataRegisters = this.handleGetDataRegisters.bind(this);
         this.openRegisterModal = this.openRegisterModal.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePrint = this.handlePrint.bind(this);
     }
 
     componentDidMount(){
@@ -89,7 +93,7 @@ export default class Registro extends Component {
             let dataResponse = await res.json();
             for (let i = 0; i < dataResponse.length; i++) {
 				dataResponse[i]["Imprimir"] = 
-				<a onClick={() => this.openModalVCardQR()} > 
+				<a onClick={() => this.openModalVCardQR(dataResponse[i])} > 
 					<ListItemIcon className="menu-icon">
 						<i className='ti-printer' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
@@ -113,6 +117,7 @@ export default class Registro extends Component {
                 categorias:""
             }
         })
+        
         try {
             let res = await fetch(`${localStorage.urlDomain}api/register/create`)
             let dataCategories = await res.json();
@@ -181,51 +186,83 @@ export default class Registro extends Component {
          })
     }
 
-    setValuesRowData(rowData){
-        const { columns } = this.state
-        let objectDataUser = {}
-        columns.forEach((column, i) => objectDataUser[column] = rowData[i]);
-
+    openModalVCardQR(objectDataUser){
+        this.setState({
+            modalVCardQR: true,
+            form:{
+                ...this.state.form,
+                id_usuario:objectDataUser['id'],
+                cantidad_impresos:objectDataUser['Cantidad Impresos']
+            }
+        })
+        delete objectDataUser['id'];
         delete objectDataUser['Imprimir'];
         delete objectDataUser['Fecha Registro'];
         delete objectDataUser['¿Tiene Escarapela?'];
+        delete objectDataUser['Cantidad Impresos'];
 
         let stringDataUser = JSON.stringify(objectDataUser);
         let stringDataUserFormated = stringDataUser.replace(/{|}|"/g, "")
         stringDataUserFormated = stringDataUserFormated.replace(/,/g,"\n\r")
-        
+
         this.setState({
             objectDataUser:objectDataUser,
             rowData: stringDataUserFormated,
         })
+        
     }
 
-    openModalVCardQR(){
-         this.setState({ 
-			modalVCardQR: true 
-        })
-    }
     closeModalvCardQR(){
         this.setState({ 
 			modalVCardQR: false 
 		});
     }
-    async handleImp(e){
+
+    async handlePrint(e){
         e.preventDefault();
-        let pri = document.getElementById("ifmcontentstoprint").contentWindow;
-        pri.focus();
-        pri.print();
+        try {
+            let pri = document.getElementById("ifmcontentstoprint").contentWindow;
+            pri.focus();
+            pri.print();
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state)
+            };
+            let res = await fetch(`${localStorage.urlDomain}api/register`, config);
+            let printResponse = await res.json();
+            if(printResponse == 200){
+                this.setState({
+                    modalVCardQR:false
+                })
+                this.handleGetColumn();
+            }
+            if(printResponse == 500){
+                this.setState({
+                    modalVCardQR:true
+                })
+            }
+        } catch (error) {
+            
+        }
+       
+            
+        // }
+        
     }
 
   
 
     render() {
-		const {columns, dataRegisters, registerModal, dataCategories, form, modalVCardQR, rowData, objectDataUser} = this.state;
+		const {columns, dataRegisters, registerModal, dataCategories, form, modalVCardQR, objectDataUser, rowData} = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
             responsive: 'scrollMaxHeight',
-            onRowClick: rowData => this.setValuesRowData(rowData),
+            // onRowClick: rowData => this.setValuesRowData(rowData),
 			print: false,
 			download: false
 		};
@@ -257,11 +294,12 @@ export default class Registro extends Component {
                         <div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
                             <FormGroup>
                                 <Label for="nombre" className="fontSizeLabel">Nombre</Label>
+                                {/* <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" /> */}
                                 <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" />
                             </FormGroup>
                             <FormGroup>
                                 <Label for="numero_documento" className="fontSizeLabel">Número Documento</Label>
-                                <Input type="text" autoComplete="off" name="numero_documento" id="nombre" value={form.numero_documento} onChange={() => this.handleChange(event)} placeholder="Número Documento" />
+                                <Input type="text" className="inputField" autoComplete="off" name="numero_documento" id="nombre" value={form.numero_documento} onChange={() => this.handleChange(event)} placeholder="Número Documento" />
                             </FormGroup>
                         </div>
                         <div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
@@ -295,28 +333,24 @@ export default class Registro extends Component {
                         cancelBtnText="Cerrar"
                         title="vCard QR"
                         cancelBtnBsStyle="danger"
-                        onConfirm={() => this.handleImp(event)}
+                        onConfirm={() => this.handlePrint(event)}
                         onCancel={() => this.closeModalvCardQR()}
                     > 
                     <Frame id="ifmcontentstoprint">
-                        <div className="row">
+                        {/* <div className="row">
                             <div style={{ width: '30px',margin: '0 auto', paddingBottom: "4px", fontFamily: 'fantasy'}}>
                                 <Label className="">URL</Label>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div style={{ width: '100px',margin: '0 auto'}}>
-                               
-                                <QRCode value={'www.ipfi.ipwork.io'} style={{width:"100px", height:"100px"}}/>
+                        </div> */}
+                        <div className="row"  style={{ fontFamily: 'monospace'}}>
+                            <div style={{ width: '250px',margin: '0 auto'}}>
+                                {objectDataUser && (Object.keys(objectDataUser)).map((key)=>(
+                                        <div key={key}> <Label for={key} style={{fontWeight:"bolder"}}>{key}</Label> : {objectDataUser[key]}<br/></div>
+                                    ))
+                                }
                             </div>
                         </div>
                         <div className="row" >
-                            <div className="col-lg-6" style={{ marginTop:"30px",float: "left",lineHeight: "34px", fontFamily:"monospace"}}>
-                                {objectDataUser && (Object.keys(objectDataUser)).map((key)=>(
-                                    <div key={key}> <Label for={key} style={{fontWeight:"bolder"}}>{key}</Label> : {objectDataUser[key]}<br/></div>
-                                ))
-                                }
-                            </div>
                             <div className="col-lg-6" style={{ float: "right" }}>
                                 <div style={{ width: '30px',margin: '0 auto', paddingBottom: "4px", fontFamily: 'fantasy'}}>
                                     <Label className="">vCard</Label>

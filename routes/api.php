@@ -36,5 +36,8 @@ Route::group(['middleware' => 'cors'], function() {
         Route::get('/register/columns/{id}', 'RegisterController@GetColumns');
 
         Route::post('/register/data', 'RegisterController@DataTable');
+
+        Route::post('/register', 'RegisterController@logPrints');
+        
     });
  });

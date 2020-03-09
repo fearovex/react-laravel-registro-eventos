@@ -94,6 +94,10 @@ class EventsController extends Controller
                 $table->string('escarapela')->nullable();
                 // if($request->escarapela){
                     $table->string('estado_escarapela')->nullable();
+
+                $table->string('cantidad_impresos')->nullable();
+
+                    $table->string('estado_cantidad_impresos')->nullable();
                 // } 
                 $table->string('categoria')->nullable();
                 // if($request->categoria){
