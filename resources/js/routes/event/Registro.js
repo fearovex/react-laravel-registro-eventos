@@ -19,6 +19,8 @@ import {
 } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import QRCode from 'qrcode.react';
+import Barcode  from 'react-barcode';
+
 import Frame from 'react-frame-component';
 
 import './styles.css';
@@ -109,7 +111,7 @@ export default class Registro extends Component {
 				dataResponse[i]["Imprimir"] = 
 				<a onClick={() => this.openModalVCardQR(dataResponse[i])} > 
 					<ListItemIcon className="menu-icon">
-						<i className='ti-pencil-alt' style={{margin:"0 auto"}}></i>
+						<i className='ti-printer' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
 				</a>
             }
@@ -153,10 +155,11 @@ export default class Registro extends Component {
         e.preventDefault();
         const { form } = this.state;
         let validation = /^[0-9]*$/;
+
         if((form.nombre == '' || form.apellidos =='') || (form.categorias =='' || form.numero_documento == '')){
             NotificationManager.error('Los campos son obligatorios','',5000);
         }
-        else if(!validation.test(form.numero_documento)){
+        if(!validation.test(form.numero_documento)){
 			NotificationManager.error('El campo número de documento debe contener únicamente números','',5000);
         }
         if((form.nombre != '' && form.apellidos !='') && (form.categorias !='' && form.numero_documento != '' && (validation.test(form.numero_documento)))){
@@ -179,6 +182,12 @@ export default class Registro extends Component {
             }
             if(registerResponse == 500){
                 NotificationManager.error('Ha ocurrido un error al registrar los datos','',5000);
+                this.setState({
+                    registerModal:true
+                })
+            }
+            if(registerResponse == 501){
+                NotificationManager.error('El documento ya se encuentra registrado, por favor digite otro documento','',5000);
                 this.setState({
                     registerModal:true
                 })
@@ -429,7 +438,7 @@ export default class Registro extends Component {
                             </div>
                         </div> */}
                         <div className="row"  style={{ fontFamily: 'monospace'}}>
-                            <div style={{ width: '250px',margin: '0 auto'}}>
+                            <div style={{ paddingBottom: "40px", width: '250px',margin: '0 auto', lineHeight: "26px"}}>
                                 {objectDataUser && (Object.keys(objectDataUser)).map((key)=>(
                                         <div key={key}> <Label for={key} style={{fontWeight:"bolder"}}>{key}</Label> : {objectDataUser[key]}<br/></div>
                                     ))
@@ -443,7 +452,18 @@ export default class Registro extends Component {
                                 </div>
                                 <QRCode value={rowData} style={{marginTop: "10px",float: "right", width:"140px", height:"140px"}}/>
                                 <div style={{clear: "both"}}></div>
-                                
+                            </div>
+                            <div  className="col-lg-6" style={{ float: "left" }}>
+                                <div style={{ width: '77px',margin: '0 auto', paddingBottom: "40px", fontFamily: 'fantasy'}}>
+                                    <Label className="">Documento</Label>
+                                </div>
+                                <div className="barCodeWidth">
+                                    {objectDataUser && objectDataUser['Numero Documento']?
+                                        <Barcode value={objectDataUser['Numero Documento']} width={2} height={50} displayValue={false} />
+                                        :
+                                        <Barcode value="error" width={2} height={50} displayValue={false} />
+                                    }
+                                </div>
                             </div>
                         </div>
                     </Frame>

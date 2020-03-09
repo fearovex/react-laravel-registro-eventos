@@ -80,22 +80,32 @@ class RegisterController extends Controller
      */
     public function store(Request $request)
     {
+        $database = session('database');
+           
         try {
             $date = Carbon::now();
             $database = session('database');
-                $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
-                $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
-                DB::connection(session('database'))->table($tabla->evento_tabla)->insert([
-                    'id_evento'=> $request->id_register,
-                    'fecha_creacion' => $date,
-                    'nombre' => $request->form['nombre'],
-                    'apellidos' => $request->form['apellidos'],
-                    'numero_documento' => $request->form['numero_documento'],
-                    'cantidad_impresos'=>0,
-                    'escarapela' => 'No',
-                    'categoria' => $categoria->nombre_categoria,
-                ]);
-                return response()->json(200);
+            $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
+            $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
+
+            $document = DB::connection($database)->table($tabla->evento_tabla)->select('numero_documento')->where('numero_documento',$request->form['numero_documento'])->first();
+                if(is_null($document)){
+                    DB::connection(session('database'))->table($tabla->evento_tabla)->insert([
+                        'id_evento'=> $request->id_register,
+                        'fecha_creacion' => $date,
+                        'nombre' => $request->form['nombre'],
+                        'apellidos' => $request->form['apellidos'],
+                        'numero_documento' => $request->form['numero_documento'],
+                        'cantidad_impresos'=>0,
+                        'escarapela' => 'No',
+                        'categoria' => $categoria->nombre_categoria,
+                    ]);
+                    return response()->json(200);
+                }
+                else{
+                    return response()->json(501);
+                }
+               
         } catch (\Throwable $th) {
             return response()->json(500);
         }

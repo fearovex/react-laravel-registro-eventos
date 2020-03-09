@@ -3,7 +3,9 @@
     font-size: 14px;
 }
 .sweetAlertCenter{
-    left: 53%!important;
+    left: 47%!important;
+    top: 41%!important;
+    width: 670px !important;
 }
 .fontSizeLabel{
     font-size: 15px;
@@ -16,6 +18,7 @@
     border: 1px solid;
     border-radius: 12px;
     padding: 20px;
+    height: 370px;
 }
 head title{
     display: hidden;
@@ -31,12 +34,9 @@ canvas{
     width: 100px !important;
     margin-bottom: 10px;
 }
-.vCard{
-    /* float: right;
-    margin-right: 56px;
-    text-align: 'center';
-    font-family: 'fantasy'; */
-}
+/* .barCodeWidth > svg {
+    width: 120px !important;
+} */
 .table-wrap td:first-child{
     text-transform: capitalize !important;
     font-weight: bold;
