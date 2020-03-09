@@ -114,6 +114,7 @@ class RegisterController extends Controller
             ]);
             return response()->json(200);
         } catch (\Throwable $th) {
+            return "hI";
             return response()->json(500);
         }
         
@@ -128,6 +129,38 @@ class RegisterController extends Controller
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    public function search(Request $request){
+        try {
+            $db = session('database');
+            $table_name= DB::connection($db)->table('eventos')->select('evento_tabla')->where('id',$request->id_register)->first();
+            
+            $select = "";
+            for ($i=0; $i < count($request->columns); $i++){
+                $diccionario = DB::connection(session('database'))->table('diccionario')->select('nombre_columna')->where('alias_columna',$request->columns[$i])->first();
+                if($diccionario){
+                    $select .= $diccionario->nombre_columna." '".$request->columns[$i]."',";
+                }
+            }        
+            $select = substr($select, 0, -1);
+            $selectCompleto = "select ".$select." from ".$table_name->evento_tabla." where numero_documento = '".$request->form["numero_documento"]."'";
+            $register = DB::connection($db)->select($selectCompleto);
+            if($register){
+                return response()->json($register, 200);
+            }
+            else{
+                return response()->json(500);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(500);
+        }
     }
 
     /**

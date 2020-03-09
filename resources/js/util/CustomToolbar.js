@@ -19,7 +19,7 @@ class CustomToolbar extends React.Component {
     const { classes } = this.props;
     return (
       <React.Fragment>
-        <Tooltip title={"Send Csv Email"}>
+        <Tooltip title={"Lector de Barras"}>
           <IconButton className={classes.iconButton} onClick={this.props.alertOpen}>
             <MailOutline className={classes.deleteIcon} />
           </IconButton>

@@ -3,6 +3,12 @@ import PageTitleBar from "Components/PageTitleBar/PageTitleBar";
 import SweetAlert from 'react-bootstrap-sweetalert'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Select from '@material-ui/core/Select';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import { Scrollbars } from 'react-custom-scrollbars';
 import {
 	Button,
 	Form,
@@ -36,6 +42,8 @@ export default class Registro extends Component {
             modalVCardQR: false,
             dataCategories:[],
             columns: [],
+            columnsDB: [],
+            codeBar: false,
             id_register: localStorage.user_register,
             dataRegisters: [],
             rowData:[],
@@ -47,7 +55,10 @@ export default class Registro extends Component {
                 categorias:"",
                 id_usuario:"",
                 cantidad_impresos:""
-            }
+            },
+            register: [],
+            userNotFound: false,
+            userRegister: false,
         }
         this.handleGetColumn = this.handleGetColumn.bind(this);
         this.handleGetDataRegisters = this.handleGetDataRegisters.bind(this);
@@ -66,12 +77,15 @@ export default class Registro extends Component {
             let columnsResponse = await res.json();
 
             let arrayNames=[]
+            let arrayNameDb=[]
 			for (let i = 0; i < columnsResponse.length; i++) {
-				arrayNames.push.apply(arrayNames, Object.values(columnsResponse[i]))
+                arrayNames.push.apply(arrayNames, Object.values(columnsResponse[i]))
+                arrayNameDb.push.apply(arrayNameDb, Object.values(columnsResponse[i]))
             }
             arrayNames.push.apply(arrayNames, Object.values({"COLUMN_NAME":"Imprimir"}));
             this.setState({
                 columns: arrayNames,
+                columnsDB: arrayNameDb,
             })
             this.handleGetDataRegisters();
         } catch (error) {
@@ -95,7 +109,7 @@ export default class Registro extends Component {
 				dataResponse[i]["Imprimir"] = 
 				<a onClick={() => this.openModalVCardQR(dataResponse[i])} > 
 					<ListItemIcon className="menu-icon">
-						<i className='ti-printer' style={{margin:"0 auto"}}></i>
+						<i className='ti-pencil-alt' style={{margin:"0 auto"}}></i>
 					</ListItemIcon>
 				</a>
             }
@@ -129,9 +143,9 @@ export default class Registro extends Component {
         }
     }
 
-    closeModalEvent(){
+    closeModalEvent(modal){
         this.setState({
-            registerModal:false
+            [modal]:false
         })
     }
 
@@ -232,7 +246,7 @@ export default class Registro extends Component {
                 },
                 body: JSON.stringify(this.state)
             };
-            let res = await fetch(`${localStorage.urlDomain}api/register`, config);
+            let res = await fetch(`${localStorage.urlDomain}api/register/logPrints`, config);
             let printResponse = await res.json();
             if(printResponse == 200){
                 this.setState({
@@ -254,17 +268,89 @@ export default class Registro extends Component {
         
     }
 
-  
+    openModalCodeBar(){
+        this.setState({
+            codeBar: true,
+            form: {
+                ...this.state.form,
+                numero_documento: "",
+            },
+        });
+    }
 
+    async searchRegister(e){
+        try {
+            let config = {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(this.state)
+			};
+			let res = await fetch(`${localStorage.urlDomain}api/register/search`, config);
+            let searchResponse = await res.json();
+            if(searchResponse == 500){
+                this.setState({
+                    codeBar: false,
+                    userNotFound: true,
+                });
+            }else{
+                this.setState({
+                    codeBar: false,
+                    userRegister: true,
+                    register: searchResponse[0],
+                });
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    handleChange(e, name=null){
+		if(e.target){
+			this.setState({
+			   form:{
+				  ...this.state.form,
+				  [e.target.name]: e.target.value
+			   }
+            })
+		 }
+		 else if(e._d){
+			let date = moment(e._d, 'YYYY/MM/DD hh:mm a');
+			let año = date.year();
+			let mes = date.month()+1;
+			let dia = date.date();
+			let hora = date.hour();
+			let minutos = date.minute();
+			this.setState({
+			   form:{
+				  ...this.state.form,
+				  [name]: (año) + '-' + (mes) + '-' + (dia) + " " + (hora) + ":" + (minutos)
+			   }
+			})
+		 }
+    }
+    
     render() {
-		const {columns, dataRegisters, registerModal, dataCategories, form, modalVCardQR, objectDataUser, rowData} = this.state;
+		const {columns, columnsDB, dataRegisters, registerModal, codeBar, dataCategories, form, modalVCardQR, rowData, objectDataUser, userNotFound, userRegister, register} = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
             responsive: 'scrollMaxHeight',
             // onRowClick: rowData => this.setValuesRowData(rowData),
 			print: false,
-			download: false
+            download: false,
+            customToolbar: () => {
+				return (
+					<a onClick={() => this.openModalCodeBar()}>
+					<ListItemIcon className="menu-icon">
+						<i className='ti-camera' style={{margin:"0 auto"}}></i>
+					</ListItemIcon>
+				</a>
+				);
+			},
 		};
         return (
             <div className="blank-wrapper">
@@ -288,7 +374,7 @@ export default class Registro extends Component {
                         title="Registro Manual"
                         cancelBtnBsStyle="danger"
                         onConfirm={() => this.handleSubmit(event)}
-                        onCancel={() => this.closeModalEvent()}
+                        onCancel={() => this.closeModalEvent("registerModal")}
                     >  
                     <div className="row">
                         <div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
@@ -364,6 +450,65 @@ export default class Registro extends Component {
                     </SweetAlert>
                 </div>
                 
+
+                <SweetAlert
+                    btnSize="sm"
+                    show={codeBar}
+                    confirmBtnText="Buscar"
+                    confirmBtnBsStyle="primary"
+                    title="Validador de registro"
+                    onConfirm={() => this.searchRegister(event)}
+                >
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <label htmlFor="numero_documento" className="">Numero de documento</label>
+                            <Input name="numero_documento" id="numero_documento" value={form.numero_documento} onChange={() => this.handleChange(event)} />
+                        </div>
+                    </div>
+                </SweetAlert>
+                <SweetAlert
+                    danger
+                    btnSize="sm"
+                    show={userNotFound}
+                    confirmBtnText="Cerrar"
+                    confirmBtnBsStyle="danger"
+                    title="Usuario No Registrado"
+                    onConfirm={() => this.closeModalEvent("userNotFound")}
+                >
+                </SweetAlert>
+
+                <SweetAlert
+                    btnSize="sm"
+                    show={userRegister}
+                    showCancel
+                    confirmBtnText="Imprimir"
+                    cancelBtnText="Cerrar"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnBsStyle="primary"
+                    title="Datos de registro"
+                    onConfirm={() => this.openModalVCardQR()}
+                    onCancel={() => this.closeModalEvent("userRegister")}
+                >
+                    <div className="row">
+                        <div className="col-lg-12 text-center">
+                            <Scrollbars className="rct-scroll" autoHeight autoHeightMin={100} autoHeightMax={320} autoHide>
+                                <div className="card mb-0 transaction-box">
+                                        <Table className="table-wrap" >
+                                        <TableBody >
+                                            {columnsDB.map((list, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell className="columnsStyles">{list}</TableCell>
+                                                    <TableCell>{register[list]}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                        </Table>
+                                    
+                                </div>
+                            </Scrollbars>
+                        </div>
+                    </div>
+                </SweetAlert>
 
                 <RctCollapsibleCard fullBlock>
 					<MUIDataTable

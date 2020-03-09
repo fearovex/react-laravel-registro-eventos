@@ -37,7 +37,9 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/register/data', 'RegisterController@DataTable');
 
-        Route::post('/register', 'RegisterController@logPrints');
+        Route::post('/register/logPrints', 'RegisterController@logPrints');
         
+        
+        Route::post('/register/search', 'RegisterController@search');
     });
  });
