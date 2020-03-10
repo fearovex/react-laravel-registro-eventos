@@ -20,6 +20,7 @@ class userseedertable extends Seeder
         $user->imgdashboard = 'demo.png';
         $user->dashboard = "/app/eventos";
         $user->id_rol = 1;
+        $user->id_sub_categoria = 0;
         $user->save();
 
         $user = new User();
@@ -30,6 +31,7 @@ class userseedertable extends Seeder
         $user->imgdashboard = 'demo.png';
         $user->dashboard = "/app/blank";
         $user->id_rol = 2;
+        $user->id_sub_categoria = 0;
         $user->save();
 
         $user = new User();
@@ -40,6 +42,7 @@ class userseedertable extends Seeder
         $user->imgdashboard = 'demo.png';
         $user->dashboard = "/app/blank";
         $user->id_rol = 3;
+        $user->id_sub_categoria = 0;
         $user->save();
 
         $user = new User();
@@ -50,6 +53,7 @@ class userseedertable extends Seeder
         $user->imgdashboard = 'demo.png';
         $user->dashboard = "/app/validador";
         $user->id_rol = 3;
+        $user->id_sub_categoria = 1;
         $user->save();
 
         $user = new User();
@@ -60,6 +64,7 @@ class userseedertable extends Seeder
         $user->imgdashboard = 'demo.png';
         $user->dashboard = "/app/validador";
         $user->id_rol = 3;
+        $user->id_sub_categoria = 2;
         $user->save();
 
         $user = new User();
@@ -70,6 +75,7 @@ class userseedertable extends Seeder
         $user->imgdashboard = 'demo.png';
         $user->dashboard = "/app/validador";
         $user->id_rol = 3;
+        $user->id_sub_categoria = 3;
         $user->save();
     }
 }

@@ -61,4 +61,3 @@ CREATE TABLE sub_categorias_usuario(
 	id_sub_categoria int,
  	PRIMARY KEY(id)
 );
-
