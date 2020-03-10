@@ -93,6 +93,7 @@
         "leaflet": "^1.5.1",
         "moment": "^2.24.0",
         "mui-datatables": "^2.8.1",
+        "multiselect-react-dropdown": "^1.4.7",
         "qrcode.react": "^1.0.0",
         "rc-input-number": "^4.5.3",
         "rc-queue-anim": "^1.6.12",

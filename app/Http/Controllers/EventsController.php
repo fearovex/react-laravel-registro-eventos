@@ -102,6 +102,11 @@ class EventsController extends Controller
                 $table->string('categoria')->nullable();
                 // if($request->categoria){
                     $table->string('estado_categoria')->nullable();
+
+                $table->string('sub_categoria')->nullable();
+                // if($request->categoria){
+                    $table->string('estado_sub_categoria')->nullable();
+
                 // }              
             });
             return 200;

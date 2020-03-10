@@ -41,5 +41,35 @@ class userseedertable extends Seeder
         $user->dashboard = "/app/blank";
         $user->id_rol = 3;
         $user->save();
+
+        $user = new User();
+        $user->name = 'Validador SubCategoria 1';
+        $user->email = 'validador1@ipwork.com';
+        $user->password = 'IPwork2020.';
+        $user->database = 'registro';
+        $user->imgdashboard = 'demo.png';
+        $user->dashboard = "/app/validador";
+        $user->id_rol = 3;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Validador SubCategoria 2';
+        $user->email = 'validador2@ipwork.com';
+        $user->password = 'IPwork2020.';
+        $user->database = 'registro';
+        $user->imgdashboard = 'demo.png';
+        $user->dashboard = "/app/validador";
+        $user->id_rol = 3;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Validador SubCategoria 3';
+        $user->email = 'validador3@ipwork.com';
+        $user->password = 'IPwork2020.';
+        $user->database = 'registro';
+        $user->imgdashboard = 'demo.png';
+        $user->dashboard = "/app/validador";
+        $user->id_rol = 3;
+        $user->save();
     }
 }

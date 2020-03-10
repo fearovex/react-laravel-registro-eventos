@@ -17,6 +17,7 @@ import {
     Input,
     CustomInput
 } from 'reactstrap';
+import { Multiselect } from 'multiselect-react-dropdown';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import QRCode from 'qrcode.react';
 import Barcode  from 'react-barcode';
@@ -43,6 +44,7 @@ export default class Registro extends Component {
             registerModal: false,
             modalVCardQR: false,
             dataCategories:[],
+            dataSubCategories:[],
             columns: [],
             columnsDB: [],
             codeBar: false,
@@ -55,6 +57,7 @@ export default class Registro extends Component {
                 apellidos: "",
                 numero_documento: "",
                 categorias:"",
+                sub_categorias:[],
                 id_usuario:"",
                 cantidad_impresos:""
             },
@@ -67,6 +70,7 @@ export default class Registro extends Component {
         this.openRegisterModal = this.openRegisterModal.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handlePrint = this.handlePrint.bind(this);
+        this.onSelect = this.onSelect.bind(this);
     }
 
     componentDidMount(){
@@ -130,16 +134,21 @@ export default class Registro extends Component {
                 nombre:"",
                 apellidos: "",
                 numero_documento: "",
-                categorias:""
+                categorias:"",
+                sub_categorias:""
             }
         })
         
         try {
             let res = await fetch(`${localStorage.urlDomain}api/register/create`)
-            let dataCategories = await res.json();
+            let data = await res.json();
             this.setState({
-                dataCategories:dataCategories
+                dataCategories:data[0],
+                dataSubCategories:data[1]
             })
+            console.log(data[1]);
+
+            
         } catch (error) {
             
         }
@@ -156,13 +165,13 @@ export default class Registro extends Component {
         const { form } = this.state;
         let validation = /^[0-9]*$/;
 
-        if((form.nombre == '' || form.apellidos =='') || (form.categorias =='' || form.numero_documento == '')){
+        if((form.nombre == '' || form.apellidos =='') || (form.categorias =='' || form.numero_documento == '' || (form.sub_categorias == ''))){
             NotificationManager.error('Los campos son obligatorios','',5000);
         }
         if(!validation.test(form.numero_documento)){
 			NotificationManager.error('El campo número de documento debe contener únicamente números','',5000);
         }
-        if((form.nombre != '' && form.apellidos !='') && (form.categorias !='' && form.numero_documento != '' && (validation.test(form.numero_documento)))){
+        if((form.nombre != '' && form.apellidos !='') && (form.categorias !='' && form.numero_documento != '' && (form.sub_categorias != '' && validation.test(form.numero_documento)))){
             let config = {
 				method: 'POST',
 				headers: {
@@ -341,9 +350,23 @@ export default class Registro extends Component {
 			})
 		 }
     }
-    
+
+    onSelect(selectedList, selectedItem) {
+        console.log(selectedList)
+        this.setState({
+            form:{
+                ...this.state.form,
+                sub_categorias:selectedList
+            }
+        })
+    }
+
+    onRemove(selectedList, removedItem) {
+        console.log(selectedList)
+    }
+
     render() {
-		const {columns, columnsDB, dataRegisters, registerModal, codeBar, dataCategories, form, modalVCardQR, rowData, objectDataUser, userNotFound, userRegister, register} = this.state;
+		const {columns, columnsDB, dataRegisters, registerModal, codeBar, dataCategories, dataSubCategories, form, modalVCardQR, rowData, objectDataUser, userNotFound, userRegister, register} = this.state;
 		const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
@@ -386,33 +409,40 @@ export default class Registro extends Component {
                         onCancel={() => this.closeModalEvent("registerModal")}
                     >  
                     <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
-                            <FormGroup>
-                                <Label for="nombre" className="fontSizeLabel">Nombre</Label>
-                                {/* <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" /> */}
-                                <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="numero_documento" className="fontSizeLabel">Número Documento</Label>
-                                <Input type="text" className="inputField" autoComplete="off" name="numero_documento" id="nombre" value={form.numero_documento} onChange={() => this.handleChange(event)} placeholder="Número Documento" />
-                            </FormGroup>
-                        </div>
-                        <div className="col-lg-6 col-sm-6 col-md-6 col-xl-6">
-                            <FormGroup>
-                                <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
-                                <Input type="text" autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} onChange={() => this.handleChange(event)} placeholder="Apellidos" />
-                            </FormGroup>
-
-                            <FormGroup>
-                                <Label for="categorias" className="fontSizeLabel">Categoría</Label>
-                                <CustomInput type="select" id="categorias" name="categorias" className="selectStyle"  onChange={() => this.handleChange(event)}>
-                                    <option value="" >Seleccione una opción...</option>
-                                    {dataCategories && dataCategories.map((dataCategories) => (
-                                        <option key={dataCategories.id} value={dataCategories.id}>{dataCategories.nombre_categoria}</option>
-                                    ))}
-                                </CustomInput>
-                            </FormGroup>
-                        </div>
+                        <FormGroup>
+                            <Label for="nombre" className="fontSizeLabel">Nombre</Label>
+                            {/* <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" /> */}
+                            <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
+                            <Input type="text" autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} onChange={() => this.handleChange(event)} placeholder="Apellidos" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="numero_documento" className="fontSizeLabel">Número Documento</Label>
+                            <Input type="text" className="inputField" autoComplete="off" name="numero_documento" id="nombre" value={form.numero_documento} onChange={() => this.handleChange(event)} placeholder="Número Documento" />
+                        </FormGroup>
+                    </div>
+                    <div className="row">
+                        <FormGroup>
+                            <Label for="categorias" className="fontSizeLabel">Categoría</Label>
+                            <CustomInput type="select" id="categorias" name="categorias" className="selectStyle"  onChange={() => this.handleChange(event)}>
+                                <option value="" >Seleccione una opción...</option>
+                                {dataCategories && dataCategories.map((dataCategories) => (
+                                    <option key={dataCategories.id} value={dataCategories.id}>{dataCategories.nombre_categoria}</option>
+                                ))}
+                            </CustomInput>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="sub_categorias" className="fontSizeLabel">Sub Categoría</Label>
+                            <Multiselect
+                                options={dataSubCategories}
+                                displayValue="nombre_sub_categoria"
+                                placeholder="Seleccione una Sub Categoria"
+                                selectedValues={form.sub_categorias}
+                                onSelect={this.onSelect}
+                            />
+                        </FormGroup>
                     </div>
 
                     </SweetAlert>

@@ -18,13 +18,33 @@ CREATE TABLE diccionario (
 	alias_columna VARCHAR(100) NOT NULL
 );
 
-INSERT INTO diccionario (nombre_columna,alias_columna) VALUES ('nombre', 'Nombre'), ('descripcion', 'Descripción'), ('fecha_inicial', 'Fecha Inicial'), ('fecha_final', 'Fecha Final'), ('evento_tabla', 'Tabla'), ('fecha_creacion', 'Fecha Registro'),('nombre', 'Nombre'), ('apellidos', 'Apellido'), ('numero_documento', 'Numero Documento'), ('escarapela', '¿Tiene Escarapela?'),('cantidad_impresos','Cantidad Impresos'), ('categoria', 'Categoria');
+INSERT INTO diccionario (nombre_columna,alias_columna) VALUES ('nombre', 'Nombre'), ('descripcion', 'Descripción'), ('fecha_inicial', 'Fecha Inicial'), ('fecha_final', 'Fecha Final'), ('evento_tabla', 'Tabla'), ('fecha_creacion', 'Fecha Registro'),('nombre', 'Nombre'), ('apellidos', 'Apellido'), ('numero_documento', 'Numero Documento'), ('escarapela', '¿Tiene Escarapela?'),('cantidad_impresos','Cantidad Impresos'), ('categoria', 'Categoria'), ('sub_categoria', 'Sub Categoria');
+
+DROP TABLE IF EXISTS categorias;
 create table categorias(
     id int AUTO_INCREMENT,
     nombre_categoria varchar(100),
     PRIMARY KEY(id)
 );
 insert into categorias (nombre_categoria) VALUES('Expositor'),('Visitante'),('Estudiante'),('Staff');
+
+DROP TABLE IF EXISTS sub_categorias;
+CREATE TABLE sub_categorias(
+	id int AUTO_INCREMENT,
+	nombre_sub_categoria varchar(100),
+	id_categoria int,
+ 	PRIMARY KEY(id)
+);
+
+insert into sub_categorias (nombre_sub_categoria) VALUES 
+('Subcategoria1'),
+('Subcategoria2'),
+('Subcategoria3'),
+('Subcategoria4'),
+('Subcategoria5'),
+('Subcategoria6'),
+('Subcategoria7'),
+('Subcategoria8');
 
 DROP TABLE IF EXISTS log_impresiones;
 CREATE TABLE log_impresiones(
@@ -33,3 +53,12 @@ CREATE TABLE log_impresiones(
 	id_usuario int,
  	PRIMARY KEY(id)
 );
+
+DROP TABLE IF EXISTS sub_categorias_usuario;
+CREATE TABLE sub_categorias_usuario(
+	id int AUTO_INCREMENT,
+	id_usuario int,
+	id_sub_categoria int,
+ 	PRIMARY KEY(id)
+);
+

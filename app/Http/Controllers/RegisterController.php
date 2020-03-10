@@ -66,7 +66,13 @@ class RegisterController extends Controller
                 ->table('categorias')
                 ->select('id','nombre_categoria')
                 ->get();
-            return response()->json($categorias, 200);
+
+            $sub_categorias = DB::connection(session('database'))
+                ->table('sub_categorias')
+                ->select('id','nombre_sub_categoria')
+                ->get();
+            
+            return response()->json([$categorias,$sub_categorias], 200);
         } catch (\Throwable $th) {
             return response()->json($th, 500);
         }
@@ -81,34 +87,52 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         $database = session('database');
-           
-        try {
+        // try {
             $date = Carbon::now();
             $database = session('database');
             $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
             $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
 
+           
+            
             $document = DB::connection($database)->table($tabla->evento_tabla)->select('numero_documento')->where('numero_documento',$request->form['numero_documento'])->first();
-                if(is_null($document)){
-                    DB::connection(session('database'))->table($tabla->evento_tabla)->insert([
-                        'id_evento'=> $request->id_register,
-                        'fecha_creacion' => $date,
-                        'nombre' => $request->form['nombre'],
-                        'apellidos' => $request->form['apellidos'],
-                        'numero_documento' => $request->form['numero_documento'],
-                        'cantidad_impresos'=>0,
-                        'escarapela' => 'No',
-                        'categoria' => $categoria->nombre_categoria,
-                    ]);
-                    return response()->json(200);
-                }
-                else{
-                    return response()->json(501);
-                }
                
-        } catch (\Throwable $th) {
-            return response()->json(500);
-        }
+            if(is_null($document)){
+
+                $stringSubCategories = "";
+
+                foreach ($request->form['sub_categorias'] as $key => $value){
+                    $stringSubCategories .= $value['nombre_sub_categoria'].', ';
+                }
+                $stringSubCategories = substr($stringSubCategories, 0, -2);
+
+                $id_usuario = DB::connection(session('database'))->table($tabla->evento_tabla)->insertGetId([
+                    'id_evento'=> $request->id_register,
+                    'fecha_creacion' => $date,
+                    'nombre' => $request->form['nombre'],
+                    'apellidos' => $request->form['apellidos'],
+                    'numero_documento' => $request->form['numero_documento'],
+                    'cantidad_impresos'=>0,
+                    'escarapela' => 'No',
+                    'categoria' => $categoria->nombre_categoria,
+                    'sub_categoria' => $stringSubCategories
+                ]);
+
+                foreach ($request->form['sub_categorias'] as $key => $value){
+                    DB::connection(session('database'))->table('sub_categorias_usuario')->insertGetId([
+                        'id_usuario'=> $id_usuario,
+                        'id_sub_categoria' => $value['id']
+                    ]);
+                }
+                return response()->json(200);
+            }
+            else{
+                return response()->json(501);
+            }
+               
+        // } catch (\Throwable $th) {
+        //     return response()->json(500);
+        // }
     }
 
     public function logPrints(Request $request){
