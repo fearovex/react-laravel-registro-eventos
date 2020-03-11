@@ -26,4 +26,17 @@ class ValidadorController extends Controller
             return response()->json(500);
         }
     }
+
+    public function ListaSubCategorias(){
+        try {
+            $database = session('database');
+            $subcategorias = DB::connection($database)->table('sub_categorias')->get();
+            return response()->json($subcategorias,200);
+        } catch (\Throwable $th) {
+            return response()->json(500);
+        }
+       
+            
+
+    }
 }

@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->string('remember_token')->default('token');
             $table->tinyInteger('Conexion')->default(0)->nullable();
             $table->unsignedBigInteger('id_rol');
-            $table->unsignedBigInteger('id_sub_categoria');
             $table->foreign('id_rol')->references('id')->on('roles')->onDelete('cascade');
             $table->timestamps();
         });
