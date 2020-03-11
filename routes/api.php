@@ -40,5 +40,7 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/register/logPrints', 'RegisterController@logPrints');
 
         Route::post('/register/search', 'RegisterController@search');
+
+        Route::post('/validacion/search', 'ValidadorController@Validacion');
     });
  });
