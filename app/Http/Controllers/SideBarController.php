@@ -47,7 +47,7 @@ class SideBarController extends Controller
                             'type_multi'=> false,
                             'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-view-carousel',
-                            'path'=>'/app/eventos/'.$evento->nombre.'/validacion'
+                            'path'=>'/app/eventos/'.$evento->nombre.'/subcategoria'
                         )
                     ]
                 );
@@ -97,7 +97,7 @@ class SideBarController extends Controller
                             'type_multi'=> false,
                             'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-view-carousel',
-                            'path'=>'/app/eventos/'.$evento->nombre.'/validacion'
+                            'path'=>'/app/eventos/'.$evento->nombre.'/subcategoria'
                         )
                     ]
                 );

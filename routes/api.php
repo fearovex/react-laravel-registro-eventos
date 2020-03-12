@@ -42,5 +42,7 @@ Route::group(['middleware' => 'cors'], function() {
         Route::post('/register/search', 'RegisterController@search');
 
         Route::post('/validacion/search', 'ValidadorController@Validacion');
+
+        Route::get('/validacion/subcategorias', 'ValidadorController@ListaSubCategorias');
     });
  });

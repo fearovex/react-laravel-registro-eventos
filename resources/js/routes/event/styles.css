@@ -71,3 +71,7 @@ canvas{
     padding-bottom: 1px !important;
     width: 303px !important;
 }
+.linearProgressCustom {
+    margin-top: 115px;
+    padding: 0 130px;
+}
