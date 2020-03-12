@@ -81,11 +81,11 @@ class EventsController extends Controller
     
                 $table->string('nombre')->nullable();
                 // if($request->nombre){
-                    $table->string('estado_nombre')->nullable();
+                    // $table->string('estado_nombre')->nullable();
                 // }            
                 $table->string('apellidos')->nullable();
                 // if($request->apellidos){
-                    $table->string('estado_apellidos')->nullable();
+                    // $table->string('estado_apellidos')->nullable();
                 // }
                 $table->string('numero_documento')->nullable();
                 // if($request->numero_documento){
@@ -93,19 +93,19 @@ class EventsController extends Controller
                 // } 
                 $table->string('escarapela')->nullable();
                 // if($request->escarapela){
-                    $table->string('estado_escarapela')->nullable();
+                    // $table->string('estado_escarapela')->nullable();
 
                 $table->string('cantidad_impresos')->nullable();
 
-                    $table->string('estado_cantidad_impresos')->nullable();
+                    // $table->string('estado_cantidad_impresos')->nullable();
                 // } 
                 $table->string('categoria')->nullable();
                 // if($request->categoria){
-                    $table->string('estado_categoria')->nullable();
+                    // $table->string('estado_categoria')->nullable();
 
                 $table->string('sub_categoria')->nullable();
                 // if($request->categoria){
-                    $table->string('estado_sub_categoria')->nullable();
+                    // $table->string('estado_sub_categoria')->nullable();
 
                 // }              
             });
