@@ -54,6 +54,16 @@ CREATE TABLE log_impresiones(
  	PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS log_validadores;
+CREATE TABLE log_validadores(
+	id int AUTO_INCREMENT,
+	fecha_validacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+	id_usuario_validador int,
+	sub_categoria varchar(100),
+	estado_validacion tinyint,
+ 	PRIMARY KEY(id)
+);
+
 DROP TABLE IF EXISTS sub_categorias_usuario;
 CREATE TABLE sub_categorias_usuario(
 	id int AUTO_INCREMENT,
