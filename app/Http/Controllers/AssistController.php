@@ -53,6 +53,7 @@ class AssistController extends Controller
             ->table('assistpeople')
             ->where('id', $registro->id)
             ->update([
+                'id_userSalida' => session('id_user'),
                 'fecha_salida' => Carbon::now()
             ]);
     }
