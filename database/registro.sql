@@ -59,6 +59,7 @@ CREATE TABLE log_validadores(
 	id int AUTO_INCREMENT,
 	fecha_validacion DATETIME DEFAULT CURRENT_TIMESTAMP,
 	id_usuario_validador int,
+	numero_documento varchar(100),
 	sub_categoria varchar(100),
 	estado_validacion tinyint,
  	PRIMARY KEY(id)
