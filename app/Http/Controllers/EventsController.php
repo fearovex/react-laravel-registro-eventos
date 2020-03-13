@@ -90,6 +90,14 @@ class EventsController extends Controller
                 $table->string('numero_documento')->nullable();
                 // if($request->numero_documento){
                     $table->string('estado_numero_documento')->nullable();
+
+                $table->string('correo_electronico')->nullable();
+                // if($request->numero_documento){
+                    // $table->string('estado_correo_electronica')->nullable();
+
+                $table->string('numero_celular')->nullable();
+                // if($request->numero_documento){
+                    // $table->string('estado_numero_celular')->nullable();
                 // } 
                 $table->string('escarapela')->nullable();
                 // if($request->escarapela){

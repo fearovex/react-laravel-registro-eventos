@@ -18,7 +18,7 @@ CREATE TABLE diccionario (
 	alias_columna VARCHAR(100) NOT NULL
 );
 
-INSERT INTO diccionario (nombre_columna,alias_columna) VALUES ('nombre', 'Nombre'), ('descripcion', 'Descripción'), ('fecha_inicial', 'Fecha Inicial'), ('fecha_final', 'Fecha Final'), ('evento_tabla', 'Tabla'), ('fecha_creacion', 'Fecha Registro'),('nombre', 'Nombre'), ('apellidos', 'Apellido'), ('numero_documento', 'Numero Documento'), ('escarapela', '¿Tiene Escarapela?'),('cantidad_impresos','Cantidad Impresos'), ('categoria', 'Categoria'), ('sub_categoria', 'Sub Categoria');
+INSERT INTO diccionario (nombre_columna,alias_columna) VALUES ('nombre', 'Nombre'), ('descripcion', 'Descripción'), ('fecha_inicial', 'Fecha Inicial'), ('fecha_final', 'Fecha Final'), ('evento_tabla', 'Tabla'), ('fecha_creacion', 'Fecha Registro'),('nombre', 'Nombre'), ('apellidos', 'Apellido'), ('numero_documento', 'Numero Documento'),('correo_electronico','Correo'),('numero_celular', 'Número Contacto'), ('escarapela', '¿Tiene Escarapela?'),('cantidad_impresos','Cantidad Impresos'), ('categoria', 'Categoria'), ('sub_categoria', 'Sub Categoria');
 
 DROP TABLE IF EXISTS categorias;
 create table categorias(

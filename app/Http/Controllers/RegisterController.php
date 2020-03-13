@@ -112,6 +112,8 @@ class RegisterController extends Controller
                     'nombre' => $request->form['nombre'],
                     'apellidos' => $request->form['apellidos'],
                     'numero_documento' => $request->form['numero_documento'],
+                    'correo_electronico' => $request->form['correo_electronico'],
+                    'numero_celular' => $request->form['numero_celular'],
                     'cantidad_impresos'=>0,
                     'escarapela' => 'No',
                     'categoria' => $categoria->nombre_categoria,
