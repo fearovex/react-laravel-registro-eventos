@@ -27,6 +27,7 @@ class ValidadorController extends Controller
                 [
                     'fecha_validacion' => $date,
                     'id_usuario_validador' => session('id_user'),
+                    'numero_documento' =>$request->form["numero_documento"],
                     'sub_categoria' => $request->id,
                     'estado_validacion'=> 1,
                 ]
@@ -38,6 +39,7 @@ class ValidadorController extends Controller
                 [
                     'fecha_validacion' => $date,
                     'id_usuario_validador' => session('id_user'),
+                    'numero_documento' =>$request->form["numero_documento"],
                     'sub_categoria' => $request->id,
                     'estado_validacion'=> 0,
                 ]
