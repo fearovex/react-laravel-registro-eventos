@@ -3,9 +3,14 @@
     font-size: 14px;
 }
 .sweetAlertCenter{
-    left: 47%!important;
-    top: 41%!important;
-    width: 630px !important;
+    left: 52%!important;
+    top: 44%!important;
+    width: 520px !important;
+}
+.registroManual{
+    top: 35%!important;
+    left: 52%!important;
+    width: 520px !important;
 }
 .fontSizeLabel{
     font-size: 15px;
@@ -13,12 +18,15 @@
 .floatButton{
     float: right;
 }
+.MUIDataTable-responsiveScrollMaxHeight-8{
+    z-index: 0;
+}
 #ifmcontentstoprint{
     width:100%;
     border: 1px solid;
     border-radius: 12px;
-    padding: 20px;
-    height: 370px;
+    padding: 10px;
+    height: 330px;
 }
 head title{
     display: hidden;
@@ -59,19 +67,26 @@ canvas{
 }
 ._3vLmCG3bB3CM2hhAiQX1tN {
     position: fixed;
-    width: 21%;
+    width: 33%;
     background: #fff;
     border-radius: 4px;
     margin-top: 1px;
     z-index: 2;
 }
+._3vt7_Mh4hRCFbp__dFqBCI ul{
+    max-height: 100px !important;
+}
 ._2OR24XnUXt8OCrysr3G0XI {
     border: 1px solid #ece7e7 !important;
     padding-left: 17px !important;
     padding-bottom: 1px !important;
-    width: 303px !important;
+    /* width: 303px !important; */
 }
 .linearProgressCustom {
     margin-top: 115px;
     padding: 0 130px;
+}
+.fontSizeDivs{
+    font-size: 40px!important;
+    font-family: fantasy!important;
 }

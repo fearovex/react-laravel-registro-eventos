@@ -56,6 +56,8 @@ export default class Registro extends Component {
                 nombre:"",
                 apellidos: "",
                 numero_documento: "",
+                correo_electronico: "",
+                numero_celular: "",
                 categorias:"",
                 sub_categorias:[],
                 id_usuario:"",
@@ -134,6 +136,8 @@ export default class Registro extends Component {
                 nombre:"",
                 apellidos: "",
                 numero_documento: "",
+                correo_electronico: "",
+                numero_celular: "",
                 categorias:"",
                 sub_categorias:""
             }
@@ -163,15 +167,28 @@ export default class Registro extends Component {
     async handleSubmit(e){
         e.preventDefault();
         const { form } = this.state;
-        let validation = /^[0-9]*$/;
 
-        if((form.nombre == '' || form.apellidos =='') || (form.categorias =='' || form.numero_documento == '' || (form.sub_categorias == ''))){
+        console.log(form);
+        let validationNumbers = /^[0-9]*$/;
+        let validationPhoneNumber = /^[0][1-9]\d{9}$|^[1-9]\d{9}$/;
+        let validationEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+
+        if(((form.nombre == '' || form.apellidos =='') || (form.correo_electronico == '' || form.numero_celular == '')) || (form.categorias =='' || form.numero_documento == '' || (form.sub_categorias == ''))){
             NotificationManager.error('Los campos son obligatorios','',5000);
         }
-        if(!validation.test(form.numero_documento)){
+        if(!validationNumbers.test(form.numero_documento)){
 			NotificationManager.error('El campo número de documento debe contener únicamente números','',5000);
         }
-        if((form.nombre != '' && form.apellidos !='') && (form.categorias !='' && form.numero_documento != '' && (form.sub_categorias != '' && validation.test(form.numero_documento)))){
+        if(!validationNumbers.test(form.numero_celular)){
+			NotificationManager.error('El campo número de celular debe contener únicamente números','',5000);
+        }
+        if(!validationEmail.test(form.correo_electronico)){
+			NotificationManager.error('El número de celular tiene que ser válido','',5000);
+        }
+        if(!validationPhoneNumber.test(form.numero_celular)){
+			NotificationManager.error('El número de celular tiene que ser válido','',5000);
+        }
+        if((form.nombre != '' && form.apellidos !='' && (form.correo_electronico != '' && form.numero_celular != '')) && ((form.categorias !='' && form.numero_documento != ''&& (form.sub_categorias != '')) && (validationNumbers.test(form.numero_celular) && validationNumbers.test(form.numero_documento) && ( validationEmail.test(form.correo_electronico) && validationPhoneNumber.test(form.numero_celular))))){
             let config = {
 				method: 'POST',
 				headers: {
@@ -219,26 +236,37 @@ export default class Registro extends Component {
     }
 
     openModalVCardQR(objectDataUser){
+        console.log(objectDataUser)
+        let copyobjectDataUser = objectDataUser.constructor();
+        for (let attr in objectDataUser) {
+            if (objectDataUser.hasOwnProperty(attr)) copyobjectDataUser[attr] = objectDataUser[attr];
+        }
         this.setState({
             modalVCardQR: true,
+            objectDataUser:objectDataUser,
             form:{
                 ...this.state.form,
                 id_usuario:objectDataUser['id'],
-                cantidad_impresos:objectDataUser['Cantidad Impresos']
+                cantidad_impresos:objectDataUser['Cantidad Impresos'],
+                sub_categorias:objectDataUser['Sub Categoria'],
+                categorias:objectDataUser['Categoria'],
             }
         })
-        delete objectDataUser['id'];
-        delete objectDataUser['Imprimir'];
-        delete objectDataUser['Fecha Registro'];
-        delete objectDataUser['¿Tiene Escarapela?'];
-        delete objectDataUser['Cantidad Impresos'];
+        
+        delete copyobjectDataUser['id'];
+        delete copyobjectDataUser['Imprimir'];
+        delete copyobjectDataUser['Fecha Registro'];
+        delete copyobjectDataUser['¿Tiene Escarapela?'];    
+        delete copyobjectDataUser['Cantidad Impresos'];
+        // delete copyobjectDataUser['Numero Documento'];
+        delete copyobjectDataUser['Sub Categoria'];
+        delete copyobjectDataUser['Categoria'];
 
-        let stringDataUser = JSON.stringify(objectDataUser);
+        let stringDataUser = JSON.stringify(copyobjectDataUser);
         let stringDataUserFormated = stringDataUser.replace(/{|}|"/g, "")
         stringDataUserFormated = stringDataUserFormated.replace(/,/g,"\n\r")
 
         this.setState({
-            objectDataUser:objectDataUser,
             rowData: stringDataUserFormated,
         })
         
@@ -246,8 +274,8 @@ export default class Registro extends Component {
 
     closeModalvCardQR(){
         this.setState({ 
-			modalVCardQR: false 
-		});
+			modalVCardQR: false,
+        })
     }
 
     async handlePrint(e){
@@ -399,7 +427,7 @@ export default class Registro extends Component {
                         btnSize="sm"
                         show={registerModal}
                         showCancel
-                        customClass="sweetAlertCenter"
+                        customClass="registroManual"
                         confirmBtnText="Registrar"
                         confirmBtnBsStyle="primary"
                         cancelBtnText="Cerrar"
@@ -409,40 +437,67 @@ export default class Registro extends Component {
                         onCancel={() => this.closeModalEvent("registerModal")}
                     >  
                     <div className="row">
-                        <FormGroup>
-                            <Label for="nombre" className="fontSizeLabel">Nombre</Label>
-                            {/* <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" /> */}
-                            <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
-                            <Input type="text" autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} onChange={() => this.handleChange(event)} placeholder="Apellidos" />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="numero_documento" className="fontSizeLabel">Número Documento</Label>
-                            <Input type="text" className="inputField" autoComplete="off" name="numero_documento" id="nombre" value={form.numero_documento} onChange={() => this.handleChange(event)} placeholder="Número Documento" />
-                        </FormGroup>
+                        <div className="col-lg-6">
+                            <FormGroup className="widthFormGroups">
+                                <Label for="nombre" className="fontSizeLabel">Nombre</Label>
+                                <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" />
+                            </FormGroup>
+                        </div>
+                        <div className="col-lg-6">
+                            <FormGroup className="widthFormGroups">
+                                <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
+                                <Input type="text" autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} onChange={() => this.handleChange(event)} placeholder="Apellidos" />
+                            </FormGroup>
+                        </div>
+                       
                     </div>
                     <div className="row">
-                        <FormGroup>
-                            <Label for="categorias" className="fontSizeLabel">Categoría</Label>
-                            <CustomInput type="select" id="categorias" name="categorias" className="selectStyle"  onChange={() => this.handleChange(event)}>
-                                <option value="" >Seleccione una opción...</option>
-                                {dataCategories && dataCategories.map((dataCategories) => (
-                                    <option key={dataCategories.id} value={dataCategories.id}>{dataCategories.nombre_categoria}</option>
-                                ))}
-                            </CustomInput>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="sub_categorias" className="fontSizeLabel">Sub Categoría</Label>
-                            <Multiselect
-                                options={dataSubCategories}
-                                displayValue="nombre_sub_categoria"
-                                placeholder="Seleccione una Sub Categoria"
-                                selectedValues={form.sub_categorias}
-                                onSelect={this.onSelect}
-                            />
-                        </FormGroup>
+                        <div className="col-lg-6">
+                            <FormGroup className="widthFormGroups">
+                                <Label for="numero_documento" className="fontSizeLabel">Documento</Label>
+                                <Input type="text" autoComplete="off" name="numero_documento" id="numero_documento" value={form.numero_documento} onChange={() => this.handleChange(event)} placeholder="Documento" />
+                            </FormGroup>
+                        </div>
+                        <div className="col-lg-6">
+                            <FormGroup className="widthFormGroups">
+                                <Label for="correo_electronico" className="fontSizeLabel">Correo Electrónico</Label>
+                                <Input type="text" autoComplete="off" name="correo_electronico" id="correo_electronico" value={form.correo_electronico} onChange={() => this.handleChange(event)} placeholder="Correo Electrónico" />
+                            </FormGroup>
+                        </div>
+                       
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-6">
+                            <FormGroup className="widthFormGroups">
+                                <Label for="numero_celular" className="fontSizeLabel">Número Celular</Label>
+                                <Input type="text" autoComplete="off" name="numero_celular" id="numero_celular" value={form.numero_celular} onChange={() => this.handleChange(event)} placeholder="Número Celular" />
+                            </FormGroup>
+                        </div>
+                        <div className="col-lg-6">
+                            <FormGroup>
+                                <Label for="categorias" className="fontSizeLabel">Categoría</Label>
+                                <CustomInput type="select" id="categorias" name="categorias" className="selectStyle"  onChange={() => this.handleChange(event)}>
+                                    <option value="" >Seleccione una opción...</option>
+                                    {dataCategories && dataCategories.map((dataCategories) => (
+                                        <option key={dataCategories.id} value={dataCategories.id}>{dataCategories.nombre_categoria}</option>
+                                    ))}
+                                </CustomInput>
+                            </FormGroup>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <FormGroup>
+                                <Label for="sub_categorias" className="fontSizeLabel">Sub Categoría</Label>
+                                <Multiselect
+                                    options={dataSubCategories}
+                                    displayValue="nombre_sub_categoria"
+                                    placeholder="Seleccione una Sub Categoria"
+                                    selectedValues={form.sub_categorias}
+                                    onSelect={this.onSelect}
+                                />
+                            </FormGroup>
+                        </div>
                     </div>
 
                     </SweetAlert>
@@ -467,34 +522,44 @@ export default class Registro extends Component {
                                 <Label className="">URL</Label>
                             </div>
                         </div> */}
-                        <div className="row"  style={{ fontFamily: 'monospace'}}>
-                            <div style={{ paddingBottom: "40px", width: '250px',margin: '0 auto', lineHeight: "26px"}}>
-                                {objectDataUser && (Object.keys(objectDataUser)).map((key)=>(
-                                        <div key={key}> <Label for={key} style={{fontWeight:"bolder"}}>{key}</Label> : {objectDataUser[key]}<br/></div>
-                                    ))
-                                }
+                        <div className="row">
+                            <div style={{ position: "absolute", fontSize: "30px",fontFamily: "fantasy", paddingBottom: "10px", lineHeight: "26px", marginLeft: "80px"}}>
+                                <div style={{marginBottom:"5px"}}>
+                                    {objectDataUser.Nombre}
+                                </div>
+                                <div>
+                                    {objectDataUser.Apellido}
+                                </div>
+                                <br />
+                                <div style={{ linHeight: "normal", fontSize: "20px" }}>
+                                    {form.categorias}
+                                </div>
+                                <br />
+                            
+
+                                {/* <div key={key}> <Label for={key} style={{fontWeight:"bolder"}}>{key}</Label> : {objectDataUser[key]}<br/></div> */}
                             </div>
                         </div>
                         <div className="row" >
-                            <div className="col-lg-6" style={{ float: "right" }}>
+                            <div className="col-lg-6" style={{ position: "absolute", right: "0",bottom: "0" }}>
                                 <div style={{ width: '30px',margin: '0 auto', paddingBottom: "4px", fontFamily: 'fantasy'}}>
                                     <Label className="">vCard</Label>
                                 </div>
-                                <QRCode value={rowData} style={{marginTop: "10px",float: "right", width:"140px", height:"140px"}}/>
+                                <QRCode value={rowData} style={{marginTop: "10px",float: "right", width:"130px", height:"130px"}}/>
                                 <div style={{clear: "both"}}></div>
                             </div>
-                            <div  className="col-lg-6" style={{ float: "left" }}>
-                                <div style={{ width: '77px',margin: '0 auto', paddingBottom: "40px", fontFamily: 'fantasy'}}>
-                                    <Label className="">Documento</Label>
-                                </div>
-                                <div className="barCodeWidth">
+                            <div  className="col-lg-6" style={{ float: "left", width: "43px" }}>
+                                <div className="barCodeWidth" style={{transform: "rotate(90deg)", marginTop:"20px", marginBottom:"10px"}}>
                                     {objectDataUser && objectDataUser['Numero Documento']?
-                                        <Barcode value={objectDataUser['Numero Documento']} width={2} height={50} displayValue={false} />
+                                        <Barcode value={objectDataUser['Numero Documento']} width={2} height={30} displayValue={false} />
                                         :
-                                        <Barcode value="error" width={2} height={50} displayValue={false} />
+                                        <Barcode value="error" width={2} height={30} displayValue={false} />
                                     }
                                 </div>
                             </div>
+                        </div>
+                        <div className="row" style={{ position: "absolute", bottom:"0", width: "300px", fontSize: "15px",fontFamily: "fantasy"}}>
+                            {form.sub_categorias ? form.sub_categorias: 'error'}
                         </div>
                     </Frame>
                     </SweetAlert>
