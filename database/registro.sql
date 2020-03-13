@@ -137,6 +137,7 @@ insert into tipos_archivos_multimedia (tipo) VALUES
 ("Logo"),
 ("Favicon");
 
+DROP TABLE IF EXISTS users_radius;
 CREATE TABLE users_radius (
 	id INT(11) NOT NULL AUTO_INCREMENT,
 	id_campania INT(11) NOT NULL,
@@ -144,5 +145,19 @@ CREATE TABLE users_radius (
 	username VARCHAR(100) NOT NULL,
 	password VARCHAR(100) NOT NULL,
 	fecha_creacion DATETIME NOT NULL,
+	PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS assistpeople;
+CREATE TABLE assistpeople(
+	id INT(11) NOT NULL AUTO_INCREMENT,
+	id_userIngreso INT(11) NOT NULL,
+	id_userSalida INT(11),
+	numero_documento VARCHAR(100) NOT NULL,
+	apellidos VARCHAR(255) NOT NULL,
+	nombres VARCHAR(255) NOT NULL,
+	fecha_nacimiento VARCHAR(10) NOT NULL,
+	fecha_ingreso VARCHAR(30) NOT NULL,
+	fecha_salida VARCHAR(30),
 	PRIMARY KEY (id)
 );

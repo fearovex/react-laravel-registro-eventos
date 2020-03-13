@@ -4,6 +4,7 @@ import Dashboard from 'Routes/event/Dashboard';
 import Registro from 'Routes/event/Registro';
 import Validacion from 'Routes/event/Validacion';
 import SubCategoria from 'Routes/event/SubCategoria';
+import Assist from "Routes/assistControl";
 
 export default [
     {
@@ -25,5 +26,9 @@ export default [
 	{
 		path: 'eventos/:evento/subcategoria/validacion',
 		component: Validacion
+	},
+	{
+		path: 'eventos/:evento/asistencia',
+		component: Assist
 	},
 ]

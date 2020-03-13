@@ -46,8 +46,15 @@ class SideBarController extends Controller
                             'menu_title'=>'Validar',
                             'type_multi'=> false,
                             'id_evento' => $evento->id,
-                            'menu_icon'=>'zmdi zmdi-view-carousel',
+                            'menu_icon'=>'zmdi zmdi-scanner',
                             'path'=>'/app/eventos/'.$evento->nombre.'/subcategoria'
+                        ),
+                        (object) array(
+                            'menu_title'=>'Asistencia',
+                            'type_multi'=> false,
+                            'id_evento' => $evento->id,
+                            'menu_icon'=>'zmdi zmdi-male-alt',
+                            'path'=>'/app/eventos/'.$evento->nombre.'/asistencia'
                         )
                     ]
                 );
@@ -96,7 +103,7 @@ class SideBarController extends Controller
                             'menu_title'=>'Validar',
                             'type_multi'=> false,
                             'id_evento' => $evento->id,
-                            'menu_icon'=>'zmdi zmdi-view-carousel',
+                            'menu_icon'=>'zmdi zmdi-scanner',
                             'path'=>'/app/eventos/'.$evento->nombre.'/subcategoria'
                         )
                     ]
@@ -106,7 +113,29 @@ class SideBarController extends Controller
             return response()->json($sidebarJSON, 200);
         }
         else if($rol == 4){
-            // session(['sideBar' => $sidebarJSON]);
+            $eventos=DB::connection($database)
+                ->select("select * from eventos");
+            $eventosArray = [];
+            
+            foreach ($eventos as $count => $evento){
+                $eventosArray[$count] = (object) array(
+                    'menu_title'=>$evento->nombre,
+                    'id_evento' => $evento->id,
+                    'menu_icon'=>'zmdi zmdi-pin',
+                    'type_multi'=>false,
+                    'child_routes'=>[
+                        (object) array(
+                            'menu_title'=>'Asistencia',
+                            'type_multi'=> false,
+                            'id_evento' => $evento->id,
+                            'menu_icon'=>'zmdi zmdi-male-alt',
+                            'path'=>'/app/eventos/'.$evento->nombre.'/asistencia'
+                        )
+                    ]
+                );
+            }
+            $sidebarJSON = (object) array('category1' => $eventosArray);
+            return response()->json($sidebarJSON, 200);
         }
     }
 }
