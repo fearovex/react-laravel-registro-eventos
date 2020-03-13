@@ -9,7 +9,7 @@ import {
     Input,
     CustomInput
 } from 'reactstrap';
-import LinearQuery from './components/LinearQuery';
+import LinearQuery from 'Components/LinearQuery/LinearQuery.js';
 
 export default class Validacion extends Component {
     constructor(props){
