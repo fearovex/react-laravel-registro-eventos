@@ -18,7 +18,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/locations";
+        $user->dashboard = "/app/eventos";
         $user->id_rol = 1;
         $user->save();
 
@@ -28,18 +28,58 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/locations";
+        $user->dashboard = "/app/eventos/Evento Campestre/registro";
         $user->id_rol = 2;
         $user->save();
 
         $user = new User();
-        $user->name = 'Validador';
-        $user->email = 'validador@ipwork.com';
+        $user->name = 'Validador SubCategoria 1';
+        $user->email = 'validador1@ipwork.com';
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/locations";
+        $user->dashboard = "/app/eventos/Evento Campestre/subcategoria";
         $user->id_rol = 3;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Validador SubCategoria 2';
+        $user->email = 'validador2@ipwork.com';
+        $user->password = 'IPwork2020.';
+        $user->database = 'registro';
+        $user->imgdashboard = 'demo.png';
+        $user->dashboard = "/app/eventos/Evento Campestre/subcategoria";
+        $user->id_rol = 3;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Validador SubCategoria 3';
+        $user->email = 'validador3@ipwork.com';
+        $user->password = 'IPwork2020.';
+        $user->database = 'registro';
+        $user->imgdashboard = 'demo.png';
+        $user->dashboard = "/app/eventos/Evento Campestre/subcategoria";
+        $user->id_rol = 3;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Guarda de Seguridad 1';
+        $user->email = 'vigilante1@ipwork.com';
+        $user->password = 'IPwork2020.';
+        $user->database = 'registro';
+        $user->imgdashboard = 'demo.png';
+        $user->dashboard = "/app/eventos/Evento Campestre/asistencia";
+        $user->id_rol = 4;
+        $user->save();
+
+        $user = new User();
+        $user->name = 'Guarda de Seguridad 2';
+        $user->email = 'vigilante2@ipwork.com';
+        $user->password = 'IPwork2020.';
+        $user->database = 'registro';
+        $user->imgdashboard = 'demo.png';
+        $user->dashboard = "/app/eventos/Evento Campestre/asistencia";
+        $user->id_rol = 4;
         $user->save();
     }
 }

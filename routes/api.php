@@ -31,5 +31,20 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::resource('/events','EventsController');
 
+        Route::resource('/register', 'RegisterController');
+        
+        Route::get('/register/columns/{id}', 'RegisterController@GetColumns');
+
+        Route::post('/register/data', 'RegisterController@DataTable');
+
+        Route::post('/register/logPrints', 'RegisterController@logPrints');
+
+        Route::post('/register/search', 'RegisterController@search');
+
+        Route::post('/validacion/search', 'ValidadorController@Validacion');
+
+        Route::get('/validacion/subcategorias', 'ValidadorController@ListaSubCategorias');
+
+        Route::post('/assist', 'AssistController@registers');
     });
  });

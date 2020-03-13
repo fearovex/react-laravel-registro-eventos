@@ -45,14 +45,14 @@ class App extends Component {
          if (user === null) {
             return (<Redirect to={'/signin'} />);
          } else {
-            return (<Redirect to={/* localStorage.user_dashboard */ "/app/blank"} />);
+            return (<Redirect to={localStorage.user_dashboard} />);
          }
       }
       return (
         
          <RctThemeProvider>
             <NotificationContainer />
-            {console.log(user)}
+            {/* {console.log(user)} */}
             <InitialPath
                path={`${match.url}app`}
                authUser={user}
