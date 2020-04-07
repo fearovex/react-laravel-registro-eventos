@@ -8,7 +8,7 @@
     width: 520px !important;
 }
 .registroManual{
-    top: 35%!important;
+    top: 40%!important;
     left: 52%!important;
     width: 520px !important;
 }
@@ -49,8 +49,8 @@ canvas{
     text-transform: capitalize !important;
     font-weight: bold;
 }
-.row{
-    flex-wrap: unset !important;
+.rowSubCategories{
+    flex-wrap: wrap !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
 }
@@ -67,7 +67,7 @@ canvas{
 }
 ._3vLmCG3bB3CM2hhAiQX1tN {
     position: fixed;
-    width: 33%;
+    width: 35%;
     background: #fff;
     border-radius: 4px;
     margin-top: 1px;

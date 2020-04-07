@@ -12,7 +12,7 @@ class SideBarController extends Controller
         $database = session('database');
         if($rol == 1){
             $eventos=DB::connection($database)
-                ->select("select * from eventos");
+                ->select("select * from eventos where evento_tabla != 'portal_cautivo_campestre' && evento_tabla != 'assistpeople'");
             $eventosArray = [];
             $eventosArray[0] = (object) array(
                 'menu_title'=>'Eventos',
@@ -43,19 +43,27 @@ class SideBarController extends Controller
                             'path'=>'/app/eventos/'.$evento->nombre.'/registro'
                         ),
                         (object) array(
-                            'menu_title'=>'Validar',
+                            'menu_title'=>'Informe de SubCategorias',
+                            'type_multi'=> false,
+                            'id_evento' => $evento->id,
+                            'menu_icon'=>'zmdi zmdi-library',
+                            'path'=>'/app/eventos/'.$evento->nombre.'/informe_subcategorias'
+                        ),
+                        (object) array(
+                            'menu_title'=>'Validador de SubCategorias',
                             'type_multi'=> false,
                             'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-scanner',
                             'path'=>'/app/eventos/'.$evento->nombre.'/subcategoria'
                         ),
-                        (object) array(
-                            'menu_title'=>'Asistencia',
-                            'type_multi'=> false,
-                            'id_evento' => $evento->id,
-                            'menu_icon'=>'zmdi zmdi-male-alt',
-                            'path'=>'/app/eventos/'.$evento->nombre.'/asistencia'
-                        )
+                      
+                        // (object) array(
+                        //     'menu_title'=>'Control de Acceso',
+                        //     'type_multi'=> false,
+                        //     'id_evento' => $evento->id,
+                        //     'menu_icon'=>'zmdi zmdi-male-alt',
+                        //     'path'=>'/app/eventos/'.$evento->nombre.'/asistencia'
+                        // )
                     ]
                 );
             }
@@ -64,7 +72,7 @@ class SideBarController extends Controller
         }
         else if($rol == 2){
             $eventos=DB::connection($database)
-                ->select("select * from eventos");
+                ->select("select * from eventos where evento_tabla != 'portal_cautivo_campestre' && evento_tabla != 'assistpeople'");
             $eventosArray = [];
             
             foreach ($eventos as $count => $evento){
@@ -89,7 +97,7 @@ class SideBarController extends Controller
         }
         else if($rol == 3){
             $eventos=DB::connection($database)
-                ->select("select * from eventos");
+                ->select("select * from eventos where evento_tabla != 'portal_cautivo_campestre' && evento_tabla != 'assistpeople'");
             $eventosArray = [];
             
             foreach ($eventos as $count => $evento){
@@ -100,7 +108,14 @@ class SideBarController extends Controller
                     'type_multi'=>false,
                     'child_routes'=>[
                         (object) array(
-                            'menu_title'=>'Validar',
+                            'menu_title'=>'Informe de SubCategorias',
+                            'type_multi'=> false,
+                            'id_evento' => $evento->id,
+                            'menu_icon'=>'zmdi zmdi-library',
+                            'path'=>'/app/eventos/'.$evento->nombre.'/informe_subcategorias'
+                        ),
+                        (object) array(
+                            'menu_title'=>'Validador de SubCategorias',
                             'type_multi'=> false,
                             'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-scanner',
@@ -114,7 +129,7 @@ class SideBarController extends Controller
         }
         else if($rol == 4){
             $eventos=DB::connection($database)
-                ->select("select * from eventos");
+                ->select("select * from eventos where evento_tabla = 'assistpeople'");
             $eventosArray = [];
             
             foreach ($eventos as $count => $evento){
@@ -125,12 +140,19 @@ class SideBarController extends Controller
                     'type_multi'=>false,
                     'child_routes'=>[
                         (object) array(
-                            'menu_title'=>'Asistencia',
+                            'menu_title'=>'Control de Visitantes',
                             'type_multi'=> false,
                             'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-male-alt',
-                            'path'=>'/app/eventos/'.$evento->nombre.'/asistencia'
-                        )
+                            'path'=>'/app/eventos/'.$evento->nombre.'/control_visitantes'
+                        ),
+                        (object) array(
+                            'menu_title'=>'Informe Control de Visitantes',
+                            'type_multi'=> false,
+                            'id_evento' => $evento->id,
+                            'menu_icon'=>'zmdi zmdi-filter-list',
+                            'path'=>'/app/eventos/'.$evento->nombre.'/informe_control_visitantes'
+                        ),
                     ]
                 );
             }

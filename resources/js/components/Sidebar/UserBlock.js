@@ -88,9 +88,9 @@ export class UserBlockClass extends Component {
 							<div className="user-profile">
 								<Avatar className="size-50 bg-info rounded-circle">AD</Avatar>
 							</div>
-							<div className="user-info">
-								<span className="user-name ml-3">{localStorage.user_name}</span>
-								<i className="zmdi zmdi-chevron-down dropdown-icon mx-2"></i>
+							<div className="user-info" style={{ paddingLeft: "10px" }} >
+								<span className="user-name ml-3" >{localStorage.user_name}</span>
+								<i  className="zmdi zmdi-chevron-down dropdown-icon mx-2"></i>
 							</div>
 						</DropdownToggle>
 						<DropdownMenu>

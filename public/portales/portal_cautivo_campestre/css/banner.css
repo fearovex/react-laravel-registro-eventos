@@ -1,0 +1,67 @@
+
+@media (max-width: 750px) {
+    .banner-img img {
+        width:80%;
+        margin: 0 auto;
+        border-radius: 5px;
+        height: 200px;
+    }
+}
+@media (min-width: 760px) {
+    .banner-img img {
+        width:80%;
+        margin: 0 auto;
+        border-radius: 5px;
+        height: 300px;
+    }
+  }
+/* .banner-img img{
+    768
+} */
+
+
+.carrousel{ 
+    border-radius: 10px;
+}
+
+.field-btn-conectar {
+    padding-top: 2%;
+    margin-bottom: 5%;
+}
+
+.btn-conectar {    
+    width: 100%;
+    border-radius: 5px;
+    border: none;  
+    font-size: 16px;   
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.slick-prev {
+    left: 2%;
+    z-index: 2;
+}
+
+.slick-next {
+    right: 2%;
+}
+
+
+/* CLASES QUE CAMBIAN  */
+
+/* .btn-conectar {       
+    color: #EEE;
+    background-color: #20396f;
+    border-color: #000000;
+}
+
+.btn-conectar:hover,
+.btn-conectar:focus {
+    background-color: #1a2b50;
+    color: #EEE;
+}
+ */
+
