@@ -435,7 +435,7 @@ export default class AssistControl extends Component {
                     btnSize="sm"
                     showCancel
                     show={userSalida}
-                    customClass='sweetAlertFormCenter'
+                    customClass='sweetAlertFormCenterCustom'
                     confirmBtnText="Confirmar"
                     cancelBtnText="Cancelar"
                     confirmBtnBsStyle="primary"
@@ -480,7 +480,7 @@ export default class AssistControl extends Component {
                     btnSize="sm"
                     show={userIngreso}
                     showCancel
-                    customClass='sweetAlertFormCenter'
+                    customClass='sweetAlertFormCenterCustom'
                     confirmBtnText="Confirmar"
                     cancelBtnText="Cancelar"
                     confirmBtnBsStyle="primary"
@@ -539,7 +539,7 @@ export default class AssistControl extends Component {
                     btnSize="sm"
                     show={registroManual}
                     showCancel
-                    customClass='sweetAlertFormCenter'
+                    customClass='sweetAlertFormCenterCustom'
                     confirmBtnText="Confirmar"
                     cancelBtnText="Cancelar"
                     confirmBtnBsStyle="primary"

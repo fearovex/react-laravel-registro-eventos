@@ -32,6 +32,7 @@ export default class SubCategoria extends Component {
 
     componentDidMount(){
         this.getSubCategories();
+        localStorage.setItem('in_out_validation', 'unable');
     }
 
     async getSubCategories(){
