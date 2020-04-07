@@ -20,6 +20,9 @@ function LinearQuery(props) {
 			<br />
 			<LinearProgress color="secondary" variant="query" />
 			<br />
+			<div style={{ width: "100%",textAlign: "center",paddingBottom: "15px" }}>
+				<span>Utilice el lector de código de barras para continuar...</span>
+			</div>
 			<LinearProgress color="primary" variant="query" />
 			<br />
 			<LinearProgress color="secondary" variant="query" />

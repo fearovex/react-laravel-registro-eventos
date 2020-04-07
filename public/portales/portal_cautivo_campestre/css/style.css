@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+html {   
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+body {
+    background: transparent;
+}
+
+
+html, body {
+    height: 100%;
+}
+
+.selector-idioma {
+    position: absolute;
+    top: 3%;
+    left: 5%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.icono-idioma {
+    position: absolute;
+    text-align: center;;
+}
+
+.icono-idioma img {
+    width: 2rem;
+}
+
+.icono-idioma span {
+    font-size: small;
+    font-weight: bold;
+}
+
+.icono-idioma img:hover {
+    border: 1px solid #20396f;
+}
+
+/* CSS only for examples not required for centering */
+.container {
+    height: 100%;
+    background: transparent;
+    min-width: 100px;
+}
+
+.card {
+    background:transparent;
+    padding: 2%;
+    border: 0px solid rgba(0,0,0,.125);
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20%;
+}
+
+.logo p {
+    font-size: 1.2rem;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+.logo_terminos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+.logo_terminos img {
+    width: 250px;
+    margin: 1%;
+}
+
+.logo_terminos p {
+    font-size: 1.2rem;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+.footer {
+    color: #2b2929;
+    font-weight: bold;
+}
+
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 720px;
+    }
+
+    .icono-idioma img {
+        width: 3rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: 720px;
+    }
+
+    .icono-idioma img {
+        width: 3rem;
+    }
+
+    .logo {
+        margin-top: 5px;
+    }
+}
+
+/* CLASES MODIFICABLES */
+/* 
+.img-logo {
+    width: 120px;
+    margin: 1%;
+}
+
+
+@media (min-width: 992px) {
+    .img-logo {
+        width: 200px;
+        margin: 1%;
+    }     
+} */
+
+
+
+
+

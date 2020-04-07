@@ -62,7 +62,7 @@ class Eventos extends Component {
 
     componentDidMount(){
 		this.handleGetEvents();
-		
+		localStorage.setItem('in_out_validation', 'unable');
 	}
 	
 	async handleCreateEvent(e){

@@ -26,6 +26,7 @@ class ValidadorController extends Controller
             $log_validador = DB::connection($database)->table('log_validadores')->insert(
                 [
                     'fecha_validacion' => $date,
+                    'id_evento' => $request->id_register,
                     'id_usuario_validador' => session('id_user'),
                     'numero_documento' =>$request->form["numero_documento"],
                     'sub_categoria' => $request->id,
@@ -38,6 +39,7 @@ class ValidadorController extends Controller
             $log_validador = DB::connection($database)->table('log_validadores')->insert(
                 [
                     'fecha_validacion' => $date,
+                    'id_evento' => $request->id_register,
                     'id_usuario_validador' => session('id_user'),
                     'numero_documento' =>$request->form["numero_documento"],
                     'sub_categoria' => $request->id,
