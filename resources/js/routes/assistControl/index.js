@@ -14,6 +14,9 @@ export default class Assist extends Component {
             form: [],
         }
     }
+    componentDidMount(){
+        localStorage.setItem('in_out_validation', 'INPROCESS');
+    }
 
     redirectToValidation(in_out){
         localStorage.setItem('in_out_validation', in_out);

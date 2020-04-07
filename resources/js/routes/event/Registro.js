@@ -613,7 +613,7 @@ export default class Registro extends Component {
                                 <div style={{clear: "both"}}></div>
                             </div>
                             <div  className="col-lg-6" style={{ float: "left", width: "43px" }}>
-                                <div className="barCodeWidth" style={{transform: "rotate(90deg)", marginTop:"20px", marginBottom:"10px"}}>
+                                <div className="barCodeWidth" style={{transform: "rotate(90deg)", marginBottom:"10px"}}>
                                     {objectDataUser && objectDataUser['Numero Documento']?
                                         <Barcode value={objectDataUser['Numero Documento']} width={2} height={30} displayValue={false} />
                                         :

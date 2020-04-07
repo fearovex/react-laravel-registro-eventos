@@ -34,6 +34,7 @@ export default class Validacion extends Component {
     }
     componentDidMount(){
         this.documentInput.focus();
+        localStorage.setItem('in_out_validation', 'unable');
     }
     componentDidUpdate(){
         this.documentInput.focus();
