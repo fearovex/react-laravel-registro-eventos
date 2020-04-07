@@ -44,6 +44,25 @@ class RegisterController extends Controller
         return response()->json($detailEvents, 200);
     }
 
+    public function DataTableForModal(Request $request, $id_user){
+        // dd($id_user);
+        $db = session('database');
+        $table_name= DB::connection($db)->table('eventos')->select('evento_tabla')->where('id',$request->id_register)->first();
+
+        $select = "";
+        for ($i=0; $i < count($request->columns); $i++){
+            $diccionario = DB::connection(session('database'))->table('diccionario')->select('nombre_columna')->where('alias_columna',$request->columns[$i])->first();
+            if($diccionario){
+                $select .= $diccionario->nombre_columna." '".$request->columns[$i]."',";
+            }
+        }        
+        $select = substr($select, 0, -1);
+        $selectCompleto = "select id,".$select." from ".$table_name->evento_tabla." where id = $id_user order by fecha_creacion desc";
+        $detailEvents = DB::connection($db)->select($selectCompleto);
+        
+        return response()->json($detailEvents, 200);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -92,9 +111,6 @@ class RegisterController extends Controller
             $database = session('database');
             $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
             $categoria = DB::connection($database)->table('categorias')->select('nombre_categoria')->where('id', $request->form['categorias'])->first();
-
-           
-            
             $document = DB::connection($database)->table($tabla->evento_tabla)->select('numero_documento')->where('numero_documento',$request->form['numero_documento'])->first();
                
             if(is_null($document)){
@@ -117,7 +133,8 @@ class RegisterController extends Controller
                     'cantidad_impresos'=>0,
                     'escarapela' => 'No',
                     'categoria' => $categoria->nombre_categoria,
-                    'sub_categoria' => $stringSubCategories
+                    'sub_categoria' => $stringSubCategories,
+                    'tipo_registro' => 'Registro en sitio'
                 ]);
 
                 foreach ($request->form['sub_categorias'] as $key => $value){
@@ -126,7 +143,7 @@ class RegisterController extends Controller
                         'id_sub_categoria' => $value['id']
                     ]);
                 }
-                return response()->json(200);
+                return response()->json(['id_user'=>$id_usuario,'code'=> 200]);
             }
             else{
                 return response()->json(501);
@@ -141,8 +158,10 @@ class RegisterController extends Controller
         try {
             $database = session('database');
             $tabla = DB::connection($database)->table('eventos')->select('evento_tabla')->where('id', $request->id_register)->first();
+            
             DB::connection(session('database'))->table($tabla->evento_tabla)->where('id',$request->form['id_usuario'])->update([
                 'cantidad_impresos'=> $request->form['cantidad_impresos']+1,
+                'escarapela' => 'Si',
             ]);
     
             DB::connection(session('database'))->table('log_impresiones')->insert([

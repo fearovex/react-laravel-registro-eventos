@@ -60,7 +60,7 @@
     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     
     
-    <title>IPfi - Administrador</title>
+    <title>IPfi Registro</title>
 </head>
 
 <body>

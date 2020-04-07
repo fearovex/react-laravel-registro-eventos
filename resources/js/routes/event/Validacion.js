@@ -122,8 +122,10 @@ export default class Validacion extends Component {
                     danger
                     btnSize="sm"
                     show={userNotAllowed}
-                    confirmBtnText="Cerrar"
-                    confirmBtnBsStyle="danger"
+                    showConfirm = {false} 
+                    showCancel = {false}
+                    // confirmBtnText="Cerrar"
+                    // confirmBtnBsStyle="danger"
                     title="Usuario No Permitido"
                     onConfirm={() => this.setState({userNotAllowed:false})}
                 >
@@ -132,8 +134,10 @@ export default class Validacion extends Component {
                     success
                     btnSize="sm"
                     show={userAllowed}
-                    confirmBtnText="Cerrar"
-                    confirmBtnBsStyle="danger"
+                    // confirmBtnText="Cerrar"
+                    // confirmBtnBsStyle="danger"
+                    showConfirm = {false} 
+                    showCancel = {false}
                     title="Usuario Permitido"
                     onConfirm={() => this.setState({userAllowed:false})}
                 >

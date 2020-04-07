@@ -57,6 +57,7 @@ CREATE TABLE log_impresiones(
 DROP TABLE IF EXISTS log_validadores;
 CREATE TABLE log_validadores(
 	id int AUTO_INCREMENT,
+	id_evento int,
 	fecha_validacion DATETIME DEFAULT CURRENT_TIMESTAMP,
 	id_usuario_validador int,
 	numero_documento varchar(100),
@@ -165,10 +166,59 @@ CREATE TABLE assistpeople(
 	id_userIngreso INT(11) NOT NULL,
 	id_userSalida INT(11),
 	numero_documento VARCHAR(100) NOT NULL,
+	nombre VARCHAR(255) NOT NULL,
 	apellidos VARCHAR(255) NOT NULL,
-	nombres VARCHAR(255) NOT NULL,
 	fecha_nacimiento VARCHAR(10) NOT NULL,
 	fecha_ingreso VARCHAR(30) NOT NULL,
 	fecha_salida VARCHAR(30),
 	PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS `files_campania` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_campania` int(10) unsigned NOT NULL,
+  `id_tipo_archivo_multimedia` int(10) unsigned NOT NULL,
+  `nombre` varchar(255) NOT NULL DEFAULT 'Untitled.txt',
+  `mime` varchar(50) DEFAULT 'image/png',
+  `tamano` bigint(20) DEFAULT NULL,
+  `datos` mediumblob,
+  `estado` tinyint(4) DEFAULT NULL,
+  `fecha_creacion` datetime NOT NULL,
+  PRIMARY KEY (`id`));
+
+REPLACE INTO `files_campania` (`id`, `id_campania`, `id_tipo_archivo_multimedia`, `nombre`, `mime`, `tamano`, `datos`, `estado`, `fecha_creacion`) VALUES
+	(1, 1, 1, '/img/background.png', 'image/png', NULL, NULL, NULL, '2020-03-11 12:02:14'),
+	(2, 1, 2, '/img/logo.png', 'image/png', NULL, NULL, NULL, '2020-03-11 12:02:14'),
+	(3, 1, 3, '/img/favicon.ico', 'image/png', NULL, NULL, NULL, '2020-03-11 12:02:14');
+
+CREATE TABLE IF NOT EXISTS `banner_files_campania` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_campania` int(10) unsigned NOT NULL,
+  `nombre_img_web` varchar(255) NOT NULL DEFAULT 'Untitled.txt',
+  `mime_img_web` varchar(100) DEFAULT NULL,
+  `tamano_img_web` bigint(20) DEFAULT NULL,
+  `datos_img_web` mediumblob,
+  `nombre_img_movil` varchar(255) NOT NULL DEFAULT 'Untitled.txt',
+  `mime_img_movil` varchar(100) DEFAULT NULL,
+  `tamano_img_movil` bigint(20) DEFAULT NULL,
+  `datos_img_movil` mediumblob,
+  `estado` tinyint(4) DEFAULT NULL,
+  `fecha_creacion` datetime NOT NULL,
+  PRIMARY KEY (`id`));
+
+
+  CREATE TABLE IF NOT EXISTS `portal_cautivo_campestre` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_evento` bigint(20) NOT NULL,
+  `fecha_creacion` datetime NOT NULL,
+  `nombre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `apellidos` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_documento` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `estado_numero_documento` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `escarapela` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cantidad_impresos` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `categoria` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sub_categoria` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`));
+
+

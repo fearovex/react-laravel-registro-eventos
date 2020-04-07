@@ -37,6 +37,8 @@ Route::group(['middleware' => 'cors'], function() {
 
         Route::post('/register/data', 'RegisterController@DataTable');
 
+        Route::post('/register/dataModal/{id}', 'RegisterController@DataTableForModal');
+
         Route::post('/register/logPrints', 'RegisterController@logPrints');
 
         Route::post('/register/search', 'RegisterController@search');
@@ -46,5 +48,13 @@ Route::group(['middleware' => 'cors'], function() {
         Route::get('/validacion/subcategorias', 'ValidadorController@ListaSubCategorias');
 
         Route::post('/assist', 'AssistController@registers');
+
+        Route::get('/assist/columns/{id}', 'AssistController@GetColumns');
+        
+        Route::post('/assist/data', 'AssistController@DataTable');
+
+        Route::post('/subcategories/reportSubcategories', 'CategoriesController@indexSubCategories');
+
+        // Route::get('/subcategories/columns/{id}', 'CategoriesController@GetColumns');
     });
  });

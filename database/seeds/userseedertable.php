@@ -28,7 +28,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/blank";
+        $user->dashboard = "/app/eventos/Evento Campestre/registro";
         $user->id_rol = 2;
         $user->save();
 
@@ -38,7 +38,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/blank";
+        $user->dashboard = "/app/eventos/Evento Campestre/subcategoria";
         $user->id_rol = 3;
         $user->save();
 
@@ -48,7 +48,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/blank";
+        $user->dashboard = "/app/eventos/Evento Campestre/subcategoria";
         $user->id_rol = 3;
         $user->save();
 
@@ -58,7 +58,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/blank";
+        $user->dashboard = "/app/eventos/Evento Campestre/subcategoria";
         $user->id_rol = 3;
         $user->save();
 
@@ -68,7 +68,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/blank";
+        $user->dashboard = "/app/eventos/Evento Campestre/asistencia";
         $user->id_rol = 4;
         $user->save();
 
@@ -78,7 +78,7 @@ class userseedertable extends Seeder
         $user->password = 'IPwork2020.';
         $user->database = 'registro';
         $user->imgdashboard = 'demo.png';
-        $user->dashboard = "/app/blank";
+        $user->dashboard = "/app/eventos/Evento Campestre/asistencia";
         $user->id_rol = 4;
         $user->save();
     }
