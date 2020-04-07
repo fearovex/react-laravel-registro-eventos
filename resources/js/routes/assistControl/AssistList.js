@@ -59,12 +59,14 @@ export default class AssistList extends Component {
             let res = await fetch(`${localStorage.urlDomain}api/assist/columns/${this.state.id_register}`);
             let columnsResponse = await res.json();
 
-            let arrayNames=['Guarda Responsable Ingreso','Guarda Responsable Salida']
+            let arrayNames=['Responsable Ingreso','Responsable Salida']
             let arrayNameDb=[]
 			for (let i = 0; i < columnsResponse.length; i++) {
                 arrayNames.push.apply(arrayNames, Object.values(columnsResponse[i]))
                 arrayNameDb.push.apply(arrayNameDb, Object.values(columnsResponse[i]))
             }
+            arrayNames.push.apply(arrayNames,['A Donde Se Dirige','Quien Autoriza']);
+            
             // arrayNames.push.apply(arrayNames, Object.values({"COLUMN_NAME":"Imprimir"}));
             this.setState({
                 columns: arrayNames,

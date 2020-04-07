@@ -40,7 +40,7 @@ class AssistController extends Controller
         }        
         $select = substr($select, 0, -1);
         $main_db=\Config::get('app.database');
-        $selectCompleto = "select id, (SELECT u.name FROM $main_db.usuarios AS u WHERE id = et.id_userIngreso) AS 'Guarda Responsable Ingreso', (SELECT u.name FROM $main_db.usuarios AS u WHERE id = et.id_userSalida) AS 'Guarda Responsable Salida', ".$select." from ".$table_name->evento_tabla." as et order by id desc";
+        $selectCompleto = "select id, (SELECT u.name FROM $main_db.usuarios AS u WHERE id = et.id_userIngreso) AS 'Responsable Ingreso', (SELECT u.name FROM $main_db.usuarios AS u WHERE id = et.id_userSalida) AS 'Responsable Salida', ".$select.", et.donde_dirije as 'A Donde Se Dirige', et.quien_autoriza as 'Quien Autoriza' from ".$table_name->evento_tabla." as et order by id desc";
         $detailEvents = DB::connection($db)->select($selectCompleto);
         
         return response()->json($detailEvents, 200);
