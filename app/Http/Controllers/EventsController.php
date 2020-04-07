@@ -21,6 +21,8 @@ class EventsController extends Controller
             $eventos = DB::connection(session('database'))
                 ->table('eventos')
                 ->select('id','nombre as Nombre', 'descripcion as Descripción','fecha_inicial as Fecha Inicio','fecha_final as Fecha Fin','evento_tabla')
+                ->where('evento_tabla','!=','portal_cautivo_campestre')
+                ->where('evento_tabla','!=','assistpeople')
                 ->get();
     
             return response()->json($eventos, 200);
@@ -115,7 +117,8 @@ class EventsController extends Controller
                 // if($request->categoria){
                     // $table->string('estado_sub_categoria')->nullable();
 
-                // }              
+                // }
+                $table->string('tipo_registro')->nullable();            
             });
             return 200;
         } catch (\Throwable $th) {

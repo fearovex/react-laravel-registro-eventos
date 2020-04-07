@@ -19,7 +19,9 @@ import {
 } from 'reactstrap';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import QRCode from 'qrcode.react';
+// import QRCode from 'qrcode.react';
+// import { QRCode } from 'react-qrcode-logo';
+// import QRCodes from 'react-native-qrcode-svg';
 import Barcode  from 'react-barcode';
 
 import Frame from 'react-frame-component';
@@ -73,6 +75,7 @@ export default class Registro extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handlePrint = this.handlePrint.bind(this);
         this.onSelect = this.onSelect.bind(this);
+        this.getDataModal = this.getDataModal.bind(this);
     }
 
     componentDidMount(){
@@ -150,8 +153,6 @@ export default class Registro extends Component {
                 dataCategories:data[0],
                 dataSubCategories:data[1]
             })
-            console.log(data[1]);
-
             
         } catch (error) {
             
@@ -164,11 +165,30 @@ export default class Registro extends Component {
         })
     }
 
+    async getDataModal(id_user){
+        try {
+            let config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state)
+            };
+            let res = await fetch(`${localStorage.urlDomain}api/register/dataModal/${id_user}`, config);
+            let dataResponse = await res.json();
+            this.openModalVCardQR(dataResponse[0]);
+        } catch (error) {
+            this.setState({
+                error:error
+            })
+        }
+        
+    }
+
     async handleSubmit(e){
         e.preventDefault();
         const { form } = this.state;
-
-        console.log(form);
         let validationNumbers = /^[0-9]*$/;
         let validationPhoneNumber = /^[0][1-9]\d{9}$|^[1-9]\d{9}$/;
         let validationEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
@@ -199,12 +219,14 @@ export default class Registro extends Component {
 			};
             let res = await fetch(`${localStorage.urlDomain}api/register`, config);
             let registerResponse = await res.json();
-            if(registerResponse == 200){
+            console.log(registerResponse);
+            if(registerResponse.code == 200){
                 NotificationManager.success('Los datos se han registrado exitosamente','',5000);
                 this.setState({
                     registerModal:false
                 })
                 this.handleGetColumn();
+                this.getDataModal(registerResponse.id_user);
             }
             if(registerResponse == 500){
                 NotificationManager.error('Ha ocurrido un error al registrar los datos','',5000);
@@ -236,7 +258,6 @@ export default class Registro extends Component {
     }
 
     openModalVCardQR(objectDataUser){
-        console.log(objectDataUser)
         let copyobjectDataUser = objectDataUser.constructor();
         for (let attr in objectDataUser) {
             if (objectDataUser.hasOwnProperty(attr)) copyobjectDataUser[attr] = objectDataUser[attr];
@@ -260,16 +281,35 @@ export default class Registro extends Component {
         delete copyobjectDataUser['Cantidad Impresos'];
         // delete copyobjectDataUser['Numero Documento'];
         delete copyobjectDataUser['Sub Categoria'];
+        // delete copyobjectDataUser['Numero Documento'];
+        // delete copyobjectDataUser['Correo'];
         delete copyobjectDataUser['Categoria'];
+       
+        // delete copyobjectDataUser[' Tipo de Registro'];
 
-        let stringDataUser = JSON.stringify(copyobjectDataUser);
-        let stringDataUserFormated = stringDataUser.replace(/{|}|"/g, "")
-        stringDataUserFormated = stringDataUserFormated.replace(/,/g,"\n\r")
+        // console.log(copyobjectDataUser);
+        let stringDataUser = Object.values(copyobjectDataUser);
+        // let stringDataUser = copyobjectDataUser;
+
+        // console.log(stringDataUser);
+
+        // stringDataUser[0]; //nombre
+        // stringDataUser[1]; //apellido
+        // stringDataUser[2]; // numero de documento
+        // stringDataUser[3]; // correo
+        // stringDataUser[4]; // telefono
+        // stringDataUser[5]; // telefono
+        
+
+       
+
+        let string ="http://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=BEGIN:VCARD%0AVERSION:3.0%0AN:"+stringDataUser[1]+";"+stringDataUser[0]+"%0AFN:"+stringDataUser[0] + " " + stringDataUser[1]+"%0ATEL;TYPE=work:"+stringDataUser[4]+"%0AEMAIL;TYPE=internet,work:"+stringDataUser[3]+"%0AORG:"+stringDataUser[5]+"%0AEND:VCARD";
 
         this.setState({
-            rowData: stringDataUserFormated,
+            rowData: string,
         })
-        
+
+
     }
 
     closeModalvCardQR(){
@@ -380,7 +420,7 @@ export default class Registro extends Component {
     }
 
     onSelect(selectedList, selectedItem) {
-        console.log(selectedList)
+        // console.log(selectedList)
         this.setState({
             form:{
                 ...this.state.form,
@@ -390,18 +430,31 @@ export default class Registro extends Component {
     }
 
     onRemove(selectedList, removedItem) {
-        console.log(selectedList)
+        // console.log(selectedList)
     }
 
     render() {
 		const {columns, columnsDB, dataRegisters, registerModal, codeBar, dataCategories, dataSubCategories, form, modalVCardQR, rowData, objectDataUser, userNotFound, userRegister, register} = this.state;
-		const options = {
+        const options = {
 			filterType: 'dropdown',
 			selectableRows: false,
             responsive: 'scrollMaxHeight',
             // onRowClick: rowData => this.setValuesRowData(rowData),
+            // selectableRows: true,
+            filter:true,
 			print: false,
-            download: false,
+            download: true,
+            downloadOptions: {
+                filterOptions: {
+                    useDisplayedColumnsOnly: true, 
+                    useDisplayedRowsOnly: true
+                },
+                filename: 'Registros.csv',
+                separator: ';',
+            },
+            onDownload: (buildHead, buildBody, columns, data) => {
+                return "\uFEFF" + buildHead(columns) + buildBody(data); 
+            },
             customToolbar: () => {
 				return (
 					<a onClick={() => this.openModalCodeBar()}>
@@ -437,13 +490,13 @@ export default class Registro extends Component {
                         onCancel={() => this.closeModalEvent("registerModal")}
                     >  
                     <div className="row">
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="nombre" className="fontSizeLabel">Nombre</Label>
                                 <Input type="text" autoComplete="off" name="nombre" id="nombre" value={form.nombre} onChange={() => this.handleChange(event)} placeholder="Nombre" />
                             </FormGroup>
                         </div>
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
                                 <Input type="text" autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} onChange={() => this.handleChange(event)} placeholder="Apellidos" />
@@ -452,13 +505,13 @@ export default class Registro extends Component {
                        
                     </div>
                     <div className="row">
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="numero_documento" className="fontSizeLabel">Documento</Label>
                                 <Input type="text" autoComplete="off" name="numero_documento" id="numero_documento" value={form.numero_documento} onChange={() => this.handleChange(event)} placeholder="Documento" />
                             </FormGroup>
                         </div>
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="correo_electronico" className="fontSizeLabel">Correo Electrónico</Label>
                                 <Input type="text" autoComplete="off" name="correo_electronico" id="correo_electronico" value={form.correo_electronico} onChange={() => this.handleChange(event)} placeholder="Correo Electrónico" />
@@ -467,13 +520,13 @@ export default class Registro extends Component {
                        
                     </div>
                     <div className="row">
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="numero_celular" className="fontSizeLabel">Número Celular</Label>
                                 <Input type="text" autoComplete="off" name="numero_celular" id="numero_celular" value={form.numero_celular} onChange={() => this.handleChange(event)} placeholder="Número Celular" />
                             </FormGroup>
                         </div>
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup>
                                 <Label for="categorias" className="fontSizeLabel">Categoría</Label>
                                 <CustomInput type="select" id="categorias" name="categorias" className="selectStyle"  onChange={() => this.handleChange(event)}>
@@ -525,10 +578,10 @@ export default class Registro extends Component {
                         <div className="row">
                             <div style={{ position: "absolute", fontSize: "30px",fontFamily: "fantasy", paddingBottom: "10px", lineHeight: "26px", marginLeft: "80px"}}>
                                 <div style={{marginBottom:"5px"}}>
-                                    {objectDataUser.Nombre}
+                                    {objectDataUser.Nombres}
                                 </div>
                                 <div>
-                                    {objectDataUser.Apellido}
+                                    {objectDataUser.Apellidos}
                                 </div>
                                 <br />
                                 <div style={{ linHeight: "normal", fontSize: "20px" }}>
@@ -545,7 +598,18 @@ export default class Registro extends Component {
                                 <div style={{ width: '30px',margin: '0 auto', paddingBottom: "4px", fontFamily: 'fantasy'}}>
                                     <Label className="">vCard</Label>
                                 </div>
-                                <QRCode value={rowData} style={{marginTop: "10px",float: "right", width:"130px", height:"130px"}}/>
+                                {/* <QRCode value={rowData} style={{marginTop: "10px",float: "right"}}/> */}
+                                <img id="qr" src={rowData} alt="vcard qr"></img>
+                                
+                                {/* <QRCode
+                                    value={rowData} style={{marginTop: "10px",float: "right"}}
+                                    // logoImage={require('Assets/ipfi.png')}
+                                    // qrStyle="dots"
+                                    // quietZone={50}
+                                    // logoWidth={100}
+                                    // logo={{uri: base64Logo}}
+                                    enableCORS={true}
+                                    /> */}
                                 <div style={{clear: "both"}}></div>
                             </div>
                             <div  className="col-lg-6" style={{ float: "left", width: "43px" }}>

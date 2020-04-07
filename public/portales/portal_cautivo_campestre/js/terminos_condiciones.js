@@ -1,0 +1,9 @@
+$(function(){
+    $("#incluirTerminosCondiciones").load("terminos-condiciones.html"); 
+});
+$(function(){
+    $("#incluirTerminosCondiciones_en").load("t&c_en.html"); 
+});
+$(function(){
+    $("#incluirTerminosCondiciones_es").load("t&c_es.html"); 
+});

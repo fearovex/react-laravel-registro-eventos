@@ -56,11 +56,11 @@ export default class SubCategoria extends Component {
         return (
             <div className="blank-wrapper">
                 <PageTitleBar
-					title= "SubCategorias"
+					title= "Validador de SubCategorias"
 					match={this.props.match}
 					history={this.props.history}
 				/>
-                <div className="row">
+                <div className="row rowSubCategories">
                     {listSubCategories && listSubCategories.map((data) => (
                             <div key={data.id} className="col-md-2 col-lg-2 col-xs-2 col-sm-2 mb-2">
                                 <Link
