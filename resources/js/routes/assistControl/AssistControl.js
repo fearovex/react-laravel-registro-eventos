@@ -36,7 +36,7 @@ export default class AssistControl extends Component {
                 numero_cedula:"",
                 apellidos:"",
                 nombres:"",
-                fecha_nacimiento:"",
+                // fecha_nacimiento:"",
                 donde_dirije:"",
                 quien_autoriza:"",
             },
@@ -88,7 +88,7 @@ export default class AssistControl extends Component {
                 numero_cedula:"",
                 apellidos:"",
                 nombres:"",
-                fecha_nacimiento:"",
+                // fecha_nacimiento:"",
                 donde_dirije:"",
                 quien_autoriza:"",
             },
@@ -213,7 +213,7 @@ export default class AssistControl extends Component {
                     this.documentInput.focus();
                 }
             }
-            if(form.apellidos !='' && form.numero_cedula != '' && form.nombres !='' && this.state.in_out_validation == 'OUT' && validationDocument.test(form.numero_cedula) && validationNameAndLastName.test(form.apellidos) && validationNameAndLastName.test(form.nombres)){
+            if(this.state.in_out_validation == 'OUT' && form.numero_cedula != '' &&  validationDocument.test(form.numero_cedula)){
                 let config = {
                     method: 'POST',
                     headers: {
@@ -298,15 +298,16 @@ export default class AssistControl extends Component {
                     this.documentInput.focus();
                 }
             }
-            if((form.apellidos =='' || form.numero_cedula == '') || ((form.nombres =='' || (form.donde_dirije == '' && this.state.in_out_validation== 'IN')) || (form.quien_autoriza == '' && this.state.in_out_validation == 'IN'))){
+            if( ((form.apellidos =='') || (form.nombres =='' || form.donde_dirije == '' ) || (form.quien_autoriza == '')) && this.state.in_out_validation== 'IN' ){
                 NotificationManager.error('Todos los campos son obligatorios (excepto la fecha de nacimiento)','',5000);
+            }
+            if(this.state.in_out_validation== 'OUT' && form.numero_cedula ==''){
+                NotificationManager.error('El campo cedula es obligatorio','',5000);
             }
             if(!validationDocument.test(form.numero_cedula)){
                 NotificationManager.error('El campo Numero de Cedula solo debe contener números','',5000);
             }
-            if(!validationNameAndLastName.test(form.apellidos) || !validationNameAndLastName.test(form.nombres)){
-                NotificationManager.error('Los campos Nombres y Apellidos solo deben contener letras','',5000);
-            }
+           
         } catch (error) {
             console.log(error)
         }
@@ -321,7 +322,7 @@ export default class AssistControl extends Component {
                 numero_cedula: cedula[0],
                 apellidos: cedula[1]+" "+cedula[2],
                 nombres: cedula[3]+" "+cedula[4],
-                fecha_nacimiento: cedula[5],
+                // fecha_nacimiento: cedula[5],
             }
         })
     }
@@ -435,7 +436,7 @@ export default class AssistControl extends Component {
                     btnSize="sm"
                     showCancel
                     show={userSalida}
-                    customClass='sweetAlertFormCenterCustom'
+                    customClass='sweetAlertFormCenterCustomOut'
                     confirmBtnText="Confirmar"
                     cancelBtnText="Cancelar"
                     confirmBtnBsStyle="primary"
@@ -445,30 +446,10 @@ export default class AssistControl extends Component {
                     onCancel={() => this.closeModalExit(event)}
                 > 
                     <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="nombres" className="fontSizeLabel">Nombres</Label>
-                                <Input type="text" readOnly autoComplete="off" name="nombres" id="nombres" value={form.nombres} placeholder="Nombres" />
-                            </FormGroup>
-                        </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
-                                <Input type="text" readOnly autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} placeholder="Apellidos" />
-                            </FormGroup>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
+                        <div className="col-lg-12 col-sm-12 col-xl-12 col-12">
                             <FormGroup className="widthFormGroups">
                                 <Label for="numero_cedula" className="fontSizeLabel">N° Cedula</Label>
-                                <Input type="text" readOnly autoComplete="off" name="numero_cedula" id="numero_cedula" value={form.numero_cedula} placeholder="Número Cedula" />
-                            </FormGroup>
-                        </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="fecha_nacimiento" className="fontSizeLabel">Fecha de Nacimiento</Label>
-                                <Input type="text" readOnly autoComplete="off" name="fecha_nacimiento" id="fecha_nacimiento" value={form.fecha_nacimiento} placeholder="Fecha Nacimiento" />
+                                <Input type="text" readOnly autoComplete="off" name="numero_cedula" id="numero_cedula" value={form.numero_cedula} />
                             </FormGroup>
                         </div>
                     </div>
@@ -490,45 +471,39 @@ export default class AssistControl extends Component {
                     onCancel={() => this.closeModalEntrance(event)}
                 > 
                     <div className="row">
+                        <div className="col-lg-12 col-sm-12 col-xl-12 col-12">
+                            <FormGroup className="widthFormGroups">
+                                <Label for="numero_cedula" className="fontSizeLabel">N° Cedula</Label>
+                                <Input type="text" readOnly autoComplete="off" name="numero_cedula" id="numero_cedula" value={form.numero_cedula}/>
+                            </FormGroup>
+                        </div>
+                        
+                    </div>
+                    <div className="row">
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="nombres" className="fontSizeLabel">Nombres</Label>
-                                <Input type="text" readOnly autoComplete="off" name="nombres" id="nombres" value={form.nombres} placeholder="Nombres" />
+                                <Input type="text" readOnly autoComplete="off" name="nombres" id="nombres" value={form.nombres} />
                             </FormGroup>
                         </div>
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
-                                <Input type="text" readOnly autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} placeholder="Apellidos" />
+                                <Input type="text" readOnly autoComplete="off" name="apellidos" id="apellidos" value={form.apellidos} />
                             </FormGroup>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="numero_cedula" className="fontSizeLabel">N° Cedula</Label>
-                                <Input type="text" readOnly autoComplete="off" name="numero_cedula" id="numero_cedula" value={form.numero_cedula} placeholder="Número Cedula" />
-                            </FormGroup>
-                        </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="fecha_nacimiento" className="fontSizeLabel">Fecha de Nacimiento</Label>
-                                <Input type="text" readOnly autoComplete="off" name="fecha_nacimiento" id="fecha_nacimiento" value={form.fecha_nacimiento} placeholder="Fecha Nacimiento" />
-                            </FormGroup>
-                        </div>
-                       
                     </div>
                     <div className="row">
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="donde_dirije" className="fontSizeLabel">A Donde Se Dirije</Label>
-                                <Input type="text" autoComplete="off" name="donde_dirije" id="donde_dirije" value={form.donde_dirije} onChange={() => this.handleChangeForm(event)} placeholder="A Donde Se Dirije" />
+                                <Input type="text" autoComplete="off" name="donde_dirije" id="donde_dirije" value={form.donde_dirije} onChange={() => this.handleChangeForm(event)} />
                             </FormGroup>
                         </div>
                         <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
                             <FormGroup className="widthFormGroups">
                                 <Label for="quien_autoriza" className="fontSizeLabel">Quien le Autoriza</Label>
-                                <Input type="text" autoComplete="off" name="quien_autoriza" id="quien_autoriza" value={form.quien_autoriza} onChange={() => this.handleChangeForm(event)} placeholder="Quien Autoriza" />
+                                <Input type="text" autoComplete="off" name="quien_autoriza" id="quien_autoriza" value={form.quien_autoriza} onChange={() => this.handleChangeForm(event)} />
                             </FormGroup>
                         </div>
                     </div>
@@ -539,7 +514,7 @@ export default class AssistControl extends Component {
                     btnSize="sm"
                     show={registroManual}
                     showCancel
-                    customClass='sweetAlertFormCenterCustom'
+                    customClass={in_out_validation && in_out_validation == 'IN' ? "sweetAlertFormCenterCustom": "sweetAlertFormCenterCustomOut"}
                     confirmBtnText="Confirmar"
                     cancelBtnText="Cancelar"
                     confirmBtnBsStyle="primary"
@@ -549,48 +524,43 @@ export default class AssistControl extends Component {
                     onCancel={() => this.closeModalRegister(event)}
                 > 
                     <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="nombres" className="fontSizeLabel">Nombres</Label>
-                                <Input type="text" autoComplete="off" name="nombres" id="nombres" onChange={() => this.handleChangeForm(event)} value={form.nombres} placeholder="Nombres" />
-                            </FormGroup>
-                        </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
-                                <Input type="text" autoComplete="off" name="apellidos" id="apellidos" onChange={() => this.handleChangeForm(event)} value={form.apellidos} placeholder="Apellidos" />
-                            </FormGroup>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
+                        <div className="col-lg-12 col-sm-12 col-xl-12 col-12">
                             <FormGroup className="widthFormGroups">
                                 <Label for="numero_cedula" className="fontSizeLabel">N° Cedula</Label>
-                                <Input type="text" autoComplete="off" name="numero_cedula" id="numero_cedula" onChange={() => this.handleChangeForm(event)} value={form.numero_cedula} placeholder="Número Cedula" />
+                                <Input type="text" autoComplete="off" name="numero_cedula" id="numero_cedula" onChange={() => this.handleChangeForm(event)} value={form.numero_cedula} />
                             </FormGroup>
                         </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="fecha_nacimiento" className="fontSizeLabel">Fecha de Nacimiento</Label>
-                                <Input type="text" autoComplete="off" name="fecha_nacimiento" id="fecha_nacimiento" onChange={() => this.handleChangeForm(event)} value={form.fecha_nacimiento} placeholder="Fecha Nacimiento" />
-                                <span style={{fontSize: "12px",color: "#a5a0a0"}}>Formato (AAAA/MM/DD)</span>
-                            </FormGroup>
-                        </div>
-                       
                     </div>
+                    
                     {in_out_validation && in_out_validation == 'IN' &&
-                     <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="donde_dirije" className="fontSizeLabel">A Donde Se Dirije</Label>
-                                <Input type="text" autoComplete="off" name="donde_dirije" id="donde_dirije" value={form.donde_dirije} onChange={() => this.handleChangeForm(event)} placeholder="A Donde Se Dirije" />
-                            </FormGroup>
+                    <div>
+                        <div className="row">
+                            <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
+                                <FormGroup className="widthFormGroups">
+                                    <Label for="nombres" className="fontSizeLabel">Nombres</Label>
+                                    <Input type="text" autoComplete="off" name="nombres" id="nombres" onChange={() => this.handleChangeForm(event)} value={form.nombres} />
+                                </FormGroup>
+                            </div>
+                            <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
+                                <FormGroup className="widthFormGroups">
+                                    <Label for="apellidos" className="fontSizeLabel">Apellidos</Label>
+                                    <Input type="text" autoComplete="off" name="apellidos" id="apellidos" onChange={() => this.handleChangeForm(event)} value={form.apellidos} />
+                                </FormGroup>
+                            </div>
                         </div>
-                        <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
-                            <FormGroup className="widthFormGroups">
-                                <Label for="quien_autoriza" className="fontSizeLabel">Quien le Autoriza</Label>
-                                <Input type="text" autoComplete="off" name="quien_autoriza" id="quien_autoriza" value={form.quien_autoriza} onChange={() => this.handleChangeForm(event)} placeholder="Quien Autoriza" />
-                            </FormGroup>
+                        <div className="row">
+                            <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
+                                <FormGroup className="widthFormGroups">
+                                    <Label for="donde_dirije" className="fontSizeLabel">A Donde Se Dirije</Label>
+                                    <Input type="text" autoComplete="off" name="donde_dirije" id="donde_dirije" value={form.donde_dirije} onChange={() => this.handleChangeForm(event)} />
+                                </FormGroup>
+                            </div>
+                            <div className="col-lg-6 col-sm-6 col-xl-6 col-6">
+                                <FormGroup className="widthFormGroups">
+                                    <Label for="quien_autoriza" className="fontSizeLabel">Quien le Autoriza</Label>
+                                    <Input type="text" autoComplete="off" name="quien_autoriza" id="quien_autoriza" value={form.quien_autoriza} onChange={() => this.handleChangeForm(event)} />
+                                </FormGroup>
+                            </div>
                         </div>
                     </div>
                     }
