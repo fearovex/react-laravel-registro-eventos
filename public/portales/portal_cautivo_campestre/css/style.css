@@ -88,7 +88,7 @@ html, body {
 }
 
 .logo_terminos img {
-    width: 250px;
+    width: 130px !important;
     margin: 1%;
 }
 

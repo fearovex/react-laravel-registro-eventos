@@ -13,7 +13,9 @@
 
 
         public function validateExistNumeroDocumento($numero_documento = '', $id_evento = '') {
-            $sql = "SELECT * FROM :table WHERE numero_documento = '$numero_documento' AND id_evento = '$id_evento'";
+           
+            $sql = "SELECT * FROM :table WHERE numero_documento = '$numero_documento' AND id_evento = '2'";
+           
             $document = $this::sql($sql, Orm::FETCH_ONE); 
             if(isset($document)) {
                 return true;

@@ -93,7 +93,7 @@ class AssistController extends Controller
                 'numero_documento' => $request->form["numero_cedula"],
                 'apellidos' => $request->form["apellidos"],
                 'nombre' => $request->form["nombres"],
-                'fecha_nacimiento' => $request->form["fecha_nacimiento"],
+                // 'fecha_nacimiento' => $request->form["fecha_nacimiento"],
                 'donde_dirije' => $request->form["donde_dirije"],
                 'quien_autoriza' => $request->form["quien_autoriza"],
                 'fecha_ingreso' => Carbon::now(),

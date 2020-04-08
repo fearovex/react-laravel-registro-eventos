@@ -10,7 +10,7 @@ const AppConfig = {
    rtlLayout: false,                                         // RTL Layout
    miniSidebar: false,                                       // Mini Sidebar
    enableSidebarBackgroundImage: true,                      // Enable Sidebar Background Image
-   sidebarImage: require('Assets/img/sidebar-4.jpg'),     // Select sidebar image
+   sidebarImage: require('Assets/img/sidebar-10.jpg'),     // Select sidebar image
    isDarkSidenav: true,                                   // Set true to dark sidebar
    enableThemeOptions: false,                              // Enable Theme Options
    locale: {

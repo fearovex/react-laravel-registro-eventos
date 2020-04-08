@@ -96,7 +96,7 @@ class Header extends Component {
 								<IconButton aria-label="settings" onClick={() => this.toggleScreenFull()}>
 									{ localStorage.in_out_validation && localStorage.in_out_validation == 'IN' || localStorage.in_out_validation == 'OUT' || localStorage.in_out_validation == 'INPROCESS' ?
 										<div style={{color:'black', fontSize:'12px', paddingRight:"30px"}}>
-											<span style={{fontWeight:'bold'}}>A cargo de:</span> {localStorage.user_name}
+											<span style={{fontWeight:'bold'}}>Logueado como:</span> {localStorage.user_name}
 										</div>
 										:
 										''
