@@ -64,6 +64,8 @@ class Sidebar extends Component {
 
 	render() {
 		const { enableSidebarBackgroundImage, selectedSidebarImage, isDarkSidenav, agencySidebar } = this.props;
+		console.log(selectedSidebarImage);
+		console.log('hola');
 		return (
 			<Fragment>
 				<div
@@ -73,7 +75,7 @@ class Sidebar extends Component {
 					<div className={classNames("rct-sidebar-content", { "sidebar-overlay-dark": isDarkSidenav, 'sidebar-overlay-light': !isDarkSidenav })}>
 						<div className="site-logo">
 							<Link to="/" className="logo-normal">
-								<img src={require('Assets/logos/demo.png')} className="img-fluid"   alt="site-logo"/>
+								<img src={require(`Assets/logos/${localStorage.user_imgdashboard}`)} className="img-fluid"   alt="site-logo"/>
 							</Link> 
 						</div>
 						<div className="rct-sidebar-wrap">

@@ -33,7 +33,7 @@ export default class AssistList extends Component {
     constructor(props){
         super(props);
         
-        if(localStorage.user_module != 1 && localStorage.user_module != 4){
+        if(localStorage.user_module != 1 && localStorage.user_module != 5){
             this.props.history.goBack();
         }
 
@@ -72,8 +72,6 @@ export default class AssistList extends Component {
                 columns: arrayNames,
                 columnsDB: arrayNameDb,
             })
-            console.log(arrayNames);
-            console.log(arrayNameDb);
             this.handleGetDataRegisters();
         } catch (error) {
             console.log(error)

@@ -145,7 +145,39 @@ class SideBarController extends Controller
                             'id_evento' => $evento->id,
                             'menu_icon'=>'zmdi zmdi-male-alt',
                             'path'=>'/app/eventos/'.$evento->nombre.'/control_visitantes'
-                        ),
+                        )
+                        // (object) array(
+                        //     'menu_title'=>'Informe Control de Visitantes',
+                        //     'type_multi'=> false,
+                        //     'id_evento' => $evento->id,
+                        //     'menu_icon'=>'zmdi zmdi-filter-list',
+                        //     'path'=>'/app/eventos/'.$evento->nombre.'/informe_control_visitantes'
+                        // ),
+                    ]
+                );
+            }
+            $sidebarJSON = (object) array('category1' => $eventosArray);
+            return response()->json($sidebarJSON, 200);
+        }
+        else if($rol == 5){
+            $eventos=DB::connection($database)
+                ->select("select * from eventos where evento_tabla = 'assistpeople'");
+            $eventosArray = [];
+            
+            foreach ($eventos as $count => $evento){
+                $eventosArray[$count] = (object) array(
+                    'menu_title'=>$evento->nombre,
+                    'id_evento' => $evento->id,
+                    'menu_icon'=>'zmdi zmdi-pin',
+                    'type_multi'=>false,
+                    'child_routes'=>[
+                        // (object) array(
+                        //     'menu_title'=>'Control de Visitantes',
+                        //     'type_multi'=> false,
+                        //     'id_evento' => $evento->id,
+                        //     'menu_icon'=>'zmdi zmdi-male-alt',
+                        //     'path'=>'/app/eventos/'.$evento->nombre.'/control_visitantes'
+                        // )
                         (object) array(
                             'menu_title'=>'Informe Control de Visitantes',
                             'type_multi'=> false,
