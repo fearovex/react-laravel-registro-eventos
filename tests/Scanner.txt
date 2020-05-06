@@ -1,0 +1,7 @@
+descargar zebra 123Scan 5.03.0002
+descargar zebra core scanner driver 3.05.0001
+
+C:\Users\Public\Documents\123Scan2\Configuration Files
+
+https://www.zebra.com/la/es/products/software/scanning-systems/123scan.html
+https://www.zebra.com/la/es/products/software/scanning-systems/scanner-drivers-and-utilities/scanner-sdk-for-windows.html
